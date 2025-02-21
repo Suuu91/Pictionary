@@ -24,3 +24,11 @@ button {
   cursor: pointer;
   width: 300px;
 }
+
+body{
+  border: 2px solid black;
+  padding: 25px;
+  background: url(./img-src/home-background.jpg);
+  margin: auto;
+  background-repeat: repeat-x repeat-y;
+}
