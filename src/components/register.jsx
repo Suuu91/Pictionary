@@ -1,8 +1,8 @@
 import { useState } from "react"
 
 const Register = () =>{
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
     const submitForm = async(e) =>{
@@ -11,8 +11,8 @@ const Register = () =>{
         method: "POST",
         headers: {"Content-Type":"application/json"},
         body: JSON.stringify({
-          username:username,
           email:email,
+          username:username,
           password:password
         })
       }).then(response => response.json())
@@ -21,16 +21,16 @@ const Register = () =>{
       })
       .catch(console.error);
 
-      setUsername("");
       setEmail("");
+      setUsername("");
       setPassword("");
     }
 
   return (
     <>
     <form onSubmit={submitForm}>
-      <label>Username </label> <input onChange={(e)=>setUsername(e.target.value)}/>
       <label>Email: </label> <input onChange={(e)=>setEmail(e.target.value)}/>
+      <label>Username </label> <input onChange={(e)=>setUsername(e.target.value)}/>
       <label>Password: </label><input onChange={(e)=>setPassword(e.target.value)}/>
       <button>Submit</button>
     </form>

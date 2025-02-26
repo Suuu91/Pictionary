@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate()
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const userLogin = async(e) => {
@@ -12,12 +12,12 @@ const Login = () => {
       method:"POST",
       headers: {"Content-Type":"application/Json"},
       body:{
-        username:username,
+        email:email,
         password:password
       }
     })
 
-    setUsername("")
+    setEmail("")
     setPassword("")
     // navigate("/lobby")
   }
@@ -25,7 +25,7 @@ const Login = () => {
   return(
     <>
       <form onSubmit={userLogin}>
-        <label>Username: </label> <input onChange={(e)=>{setUsername(e.target.value)}}/>
+        <label>Email: </label> <input onChange={(e)=>{setEmail(e.target.value)}}/>
         <label>Password: </label> <input onChange={(e)=>{setPassword(e.target.value)}}/>
         <button>Login</button>
       </form>
