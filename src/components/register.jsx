@@ -1,9 +1,11 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 
 const Register = () =>{
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate()
 
     const submitForm = async(e) =>{
       e.preventDefault();
@@ -24,6 +26,7 @@ const Register = () =>{
       setEmail("");
       setUsername("");
       setPassword("");
+      navigate(`/lobby`)
     }
 
   return (

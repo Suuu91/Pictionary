@@ -19,7 +19,7 @@ const Login = () => {
 
     setEmail("")
     setPassword("")
-    // navigate("/lobby")
+    navigate(`/lobby`)
   }
 
   return(
