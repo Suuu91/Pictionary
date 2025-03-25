@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "prisma generate",
+    "build": "vite build",
+    "prisma:generate": "prisma generate",
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "nodemon server.js"
