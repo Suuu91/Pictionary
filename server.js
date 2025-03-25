@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const app = express();
-const PORT = 3000;
+const port = process.env.PORT || 4000;
 
 app.use(express.json())
 app.use(require("morgan")("dev"));
@@ -19,6 +19,6 @@ app.use((err, req, res, next) => {
   res.json(err.message ?? "Something went wrong.")
 });
 
-app.listen(PORT, () => {
-  console.log(`listening on port ${PORT}`)
+app.listen(port, () => {
+  console.log(`listening on port ${port}`)
 })
