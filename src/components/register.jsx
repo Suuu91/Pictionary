@@ -9,7 +9,7 @@ const Register = () =>{
 
     const submitForm = async(e) =>{
       e.preventDefault();
-      const response = await fetch('',{
+      const response = await fetch('https://pictionary-183l.onrender.com/register',{
         method: "POST",
         headers: {"Content-Type":"application/json"},
         body: JSON.stringify({
