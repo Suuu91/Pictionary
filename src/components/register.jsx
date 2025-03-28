@@ -32,9 +32,9 @@ const Register = () =>{
   return (
     <>
     <form onSubmit={submitForm}>
-      <label>Email: </label> <input onChange={(e)=>setEmail(e.target.value)}/>
-      <label>Username </label> <input onChange={(e)=>setUsername(e.target.value)}/>
-      <label>Password: </label><input onChange={(e)=>setPassword(e.target.value)}/>
+      <label>Email: </label> <input type="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
+      <label>Username </label> <input type="text" value={username} onChange={(e)=>setUsername(e.target.value)}/>
+      <label>Password: </label><input type="password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
       <button>Submit</button>
     </form>
       

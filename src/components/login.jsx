@@ -25,8 +25,8 @@ const Login = () => {
   return(
     <>
       <form onSubmit={userLogin}>
-        <label>Email: </label> <input onChange={(e)=>{setEmail(e.target.value)}}/>
-        <label>Password: </label> <input onChange={(e)=>{setPassword(e.target.value)}}/>
+        <label>Email: </label> <input type="email" value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
+        <label>Password: </label> <input type="password" value={password} onChange={(e)=>{setPassword(e.target.value)}}/>
         <button>Login</button>
       </form>
     </>
