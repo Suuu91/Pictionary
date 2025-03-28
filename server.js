@@ -1,12 +1,12 @@
 require("dotenv").config();
 
+const cors = require('cors');
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 4000;
 
-const cors = require('cors');
 app.use(cors({ 
-  origin: "https://pictionaryplay.netlify.app/",
+  origin: "https://pictionaryplay.netlify.app",
   methods: 'GET,POST,PUT,DELETE', 
   credentials: true, 
 }));
