@@ -4,6 +4,13 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 4000;
 
+const cors = require('cors');
+app.use(cors({ 
+  origin: "https://pictionary-183l.onrender.com",
+  methods: 'GET,POST,PUT,DELETE', 
+  credentials: true, 
+}));
+
 app.use(express.json())
 app.use(require("morgan")("dev"));
 
