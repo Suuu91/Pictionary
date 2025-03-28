@@ -6,7 +6,7 @@ const port = process.env.PORT || 4000;
 
 const cors = require('cors');
 app.use(cors({ 
-  origin: "https://pictionary-183l.onrender.com",
+  origin: "https://pictionaryplay.netlify.app/",
   methods: 'GET,POST,PUT,DELETE', 
   credentials: true, 
 }));
