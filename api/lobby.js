@@ -5,7 +5,7 @@ module.exports = router;
 const prisma = require("../prisma")
 const {authenticate} = require("./auth")
 
-router.get("/", async (req, res, next) => {
+router.get("/lobby", async (req, res, next) => {
   try {
     const lobbies = await prisma.lobby.findMany();
     res.json(lobbies);
@@ -14,7 +14,7 @@ router.get("/", async (req, res, next) => {
   };
 })
 
-router.post("/", authenticate, async (req, res, next) => {
+router.post("/lobby", authenticate, async (req, res, next) => {
   const {name} = req.body
   try {
     const addLobby = await prisma.lobby.create({
