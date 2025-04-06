@@ -23,7 +23,7 @@ const Lobby = (token) => {
   };
 
   const createLobby = async(event) => {
-    const loggedUser = localStorage.getItem(username)
+    const loggedUser = localStorage.getItem("username")
     event.preventDefault()
     const res = await fetch('https://pictionary-183l.onrender.com/lobby', {
       method: `POST`,
