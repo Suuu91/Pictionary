@@ -33,11 +33,12 @@ const Lobby = (token) => {
       },
       body:JSON.stringify({
         name:partyName,
-        user:loggedUser
+        players:loggedUser
       })
     });
     if (res.ok) {
       const newLobby = await res.json()
+      console.log(newLobby)
       // navigate(`/lobby/${newLobby.id}`)
     }
     else {
