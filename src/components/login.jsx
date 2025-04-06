@@ -22,9 +22,10 @@ const Login = ({setToken, token}) => {
     localStorage.setItem('token', accessToken);
     setEmail("")
     setPassword("")
-    if (accessToken.token){
+    if (accessToken){
       navigate(`/lobby`)
     }
+    else{alert("Please enter valid information.")}
   }
 
   return(
