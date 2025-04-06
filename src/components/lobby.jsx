@@ -20,9 +20,10 @@ const Lobby = (token) => {
   const getInputBar = () => {
     setISButtonVisible("none");
     setIsInputVisible("");
-  }
+  };
 
   const createLobby = async(event) => {
+    const loggedUser = localStorage.getItem(username)
     event.preventDefault()
     const res = await fetch('https://pictionary-183l.onrender.com/lobby', {
       method: `POST`,
@@ -31,12 +32,13 @@ const Lobby = (token) => {
         'Authorization': `Bearer ${token}` 
       },
       body:JSON.stringify({
-        name:partyName
+        name:partyName,
+        user:loggedUser
       })
     });
     if (res.ok) {
       const newLobby = await res.json()
-      navigate(`/lobby/${newLobby.id}`)
+      // navigate(`/lobby/${newLobby.id}`)
     }
     else {
       alert("please enter a valid party name")

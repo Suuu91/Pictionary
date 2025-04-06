@@ -17,12 +17,13 @@ router.get("/lobby", async (req, res, next) => {
 router.post("/lobby", authenticate, async (req, res, next) => {
   const {name} = req.body
   try {
-    const addLobby = await prisma.lobby.create({
+    const addedLobby = await prisma.lobby.create({
       data: {
         name,
         players: req.user
       }
     });
+    res.json(addedLobby)
   } catch (error) {
     next(error);
   }
