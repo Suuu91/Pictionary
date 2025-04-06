@@ -1,25 +1,30 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = ({setToken, token}) => {
   const navigate = useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const userLogin = async(e) => {
     e.preventDefault();
-    const response = fetch("https://pictionary-183l.onrender.com/login", {
+    const response = await fetch("https://pictionary-183l.onrender.com/login", {
       method:"POST",
-      headers: {"Content-Type":"application/Json"},
-      body:{
+      headers: {"Content-Type":"application/json"},
+      body:JSON.stringify({
         email:email,
         password:password
-      }
-    })
-
+      })
+    });
+    const loginMessage = await response.json()
+    const accessToken = loginMessage.token;
+    setToken(accessToken);
+    localStorage.setItem('token', accessToken);
     setEmail("")
     setPassword("")
-    navigate(`/lobby`)
+    if (accessToken.token){
+      navigate(`/lobby`)
+    }
   }
 
   return(
