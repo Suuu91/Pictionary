@@ -20,6 +20,7 @@ const Login = ({setToken, token}) => {
     const accessToken = loginMessage.token;
     setToken(accessToken);
     localStorage.setItem('token', accessToken);
+    localStorage.setItem("username", loginMessage.user.username);
     setEmail("")
     setPassword("")
     if (accessToken){
