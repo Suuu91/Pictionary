@@ -6,7 +6,10 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 app.use(cors({ 
-  origin: "https://pictionaryplay.netlify.app",
+  origin: [
+    "https://pictionaryplay.netlify.app",
+    'http://localhost:5173'
+  ],
   methods: 'GET,POST,PUT,DELETE', 
   credentials: true, 
 }));
@@ -14,7 +17,8 @@ app.use(cors({
 app.use(express.json())
 app.use(require("morgan")("dev"));
 
-app.use(require("./api/auth").router)
+app.use(require("./api/auth").router);
+app.use(require("./api/lobby"));
 
 app.use((req, res, next) => {
   next({status:404, message: "Endpoint not found."})
