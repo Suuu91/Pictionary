@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Lobby = () => {
+const Lobby = (token) => {
   const [allLobby, setAllLobby] = useState([]);
   const [isButtonVisible, setISButtonVisible] = useState("");
   const [isInputVisible, setIsInputVisible] = useState("none");
@@ -28,6 +28,7 @@ const Lobby = () => {
       method: `POST`,
       headers: {
         "Content-Type":"application/json",
+        'Authorization': `Bearer ${token}` 
       },
       body:JSON.stringify({
         name:partyName
