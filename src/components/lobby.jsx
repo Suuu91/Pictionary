@@ -7,8 +7,7 @@ const Lobby = () => {
     const getAllRoom = async() => {
       const res = await fetch('https://pictionary-183l.onrender.com/lobby')
       const allLobbyInfo = await res.json()
-      setAllLobby(allLobbyInfo.name)
-      console.log(allLobby)
+      setAllLobby(allLobbyInfo)
     };
     getAllRoom()
   },[])
@@ -20,7 +19,7 @@ const Lobby = () => {
         {
           allLobby.map((singleLobby) => {
             return (
-              <section>
+              <section key={singleLobby.id}>
                 <ul>{singleLobby.name}</ul>
               </section>
             )
