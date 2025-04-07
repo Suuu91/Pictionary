@@ -17,29 +17,28 @@ const Lobby = (token) => {
     getAllRoom()
   },[])
 
-  const getInputBar = () => {
+  const getInputBar = (e) => {
+    e.preventDefault()
     setISButtonVisible("none");
     setIsInputVisible("");
   };
 
   const createLobby = async(event) => {
-    const loggedUser = localStorage.getItem("username")
     event.preventDefault()
     const res = await fetch('https://pictionary-183l.onrender.com/lobby', {
       method: `POST`,
       headers: {
         "Content-Type":"application/json",
-        'Authorization': `Bearer ${token}` 
+        'Authorization':`Bearer ${token}` 
       },
       body:JSON.stringify({
-        name:partyName,
-        players:loggedUser
+        name:partyName
       })
     });
+    const newLobby = await res.json()
+    console.log(newLobby)
     if (res.ok) {
-      const newLobby = await res.json()
-      console.log(newLobby)
-      // navigate(`/lobby/${newLobby.id}`)
+      navigate(`/lobby/${newLobby.id}`)
     }
     else {
       alert("please enter a valid party name")
@@ -78,4 +77,4 @@ const Lobby = (token) => {
   )
 }
 
-export default Lobby;
+export default Lobby

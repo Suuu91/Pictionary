@@ -20,6 +20,7 @@ router.use(async(req, res, next) => {
       where:{id}
     })
     req.user = user
+    next()
   } catch (error) {
     next(error)
   }
