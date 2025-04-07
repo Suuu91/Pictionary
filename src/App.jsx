@@ -13,8 +13,8 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home/>}/>
-      <Route path="/register" element={<Register/>}/>
-      <Route path="/login" element={<Login setToken={setToken} token={token}/>}/>
+      <Route path="/register" element={<Register setToken={setToken}/>}/>
+      <Route path="/login" element={<Login setToken={setToken}/>}/>
       <Route path="/lobby" element={<Lobby token={token}/>}/> 
       <Route path="/game" element={<Game/>}/>
     </Routes> 

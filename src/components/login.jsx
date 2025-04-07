@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Login = ({setToken, token}) => {
+const Login = ({setToken}) => {
   const navigate = useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,18 +16,17 @@ const Login = ({setToken, token}) => {
         password:password
       })
     });
-    const loginMessage = await response.json()
+    const loginMessage = await response.json();
     const accessToken = loginMessage.token;
     setToken(accessToken);
-    localStorage.setItem('token', accessToken);
-    localStorage.setItem("username", loginMessage.user.username);
     setEmail("")
     setPassword("")
     if (accessToken){
+      localStorage.setItem('token', accessToken);
       navigate(`/lobby`)
     }
       else{alert("Please enter valid information.")}
-    }
+    };
 
   return(
     <>

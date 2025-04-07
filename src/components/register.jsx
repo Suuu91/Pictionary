@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Register = () =>{
+const Register = ({setToken}) =>{
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -18,11 +18,18 @@ const Register = () =>{
         password:password
       })
     });
+    const registerMessage = await response.json();
+    const accessToken = registerMessage.token;
+    setToken(accessToken);
     setEmail("");
     setUsername("");
     setPassword("");
-    navigate(`/login`)
-  }
+    if (accessToken){
+      localStorage.setItem('token', accessToken);
+      navigate(`/lobby`)
+    }
+      else{alert("Please enter valid information.")}
+    };
 
   return (
     <>
