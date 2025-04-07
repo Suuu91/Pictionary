@@ -26,8 +26,8 @@ const Login = ({setToken, token}) => {
     if (accessToken){
       navigate(`/lobby`)
     }
-    else{alert("Please enter valid information.")}
-  }
+      else{alert("Please enter valid information.")}
+    }
 
   return(
     <>
