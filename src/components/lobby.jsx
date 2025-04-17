@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Lobby = (token) => {
+const Lobby = ({token}) => {
   const [allLobby, setAllLobby] = useState([]);
   const [isButtonVisible, setISButtonVisible] = useState("");
   const [isInputVisible, setIsInputVisible] = useState("none");
