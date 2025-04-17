@@ -38,7 +38,7 @@ const Lobby = ({token}) => {
     const newLobby = await res.json()
     console.log(newLobby)
     if (res.ok) {
-      navigate(`/lobby/${newLobby.id}`)
+      navigate(`/lobby/${newLobby.lobby.id}`)
     }
     else {
       alert("please enter a valid party name")
