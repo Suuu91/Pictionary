@@ -21,7 +21,11 @@ router.post("/lobby", authenticate, async (req, res, next) => {
     const addedLobby = await prisma.lobby.create({
       data: {
         name,
-        players:user
+        players: {
+          connect: {
+            id:user.id
+          }
+        }
       }
     });
     res.status(201).json({lobby:addedLobby})
