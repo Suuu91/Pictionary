@@ -5,7 +5,6 @@ const Game = ()  => {
   return (
     <>
       <Canvas/>
-      <h1>Game</h1>
     </>
   )
 }

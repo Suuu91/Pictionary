@@ -10,6 +10,7 @@ router.get("/lobby", async (req, res, next) => {
     const lobbies = await prisma.lobby.findMany();
     res.json(lobbies);
   } catch (error) {
+    console.error("GET /lobby failed:", error);
     next(error);
   };
 })
