@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "../styles/auth.module.css";
 
 const Register = ({setToken}) =>{
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ const Register = ({setToken}) =>{
 
   return (
     <>
-      <form onSubmit={submitForm} id="register">
+      <form onSubmit={submitForm} id={styles.register}>
         <label>Email: </label> <input type="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
         <label>Username </label> <input type="text" value={username} onChange={(e)=>setUsername(e.target.value)}/>
         <label>Password: </label><input type="password" value={password} onChange={(e)=>setPassword(e.target.value)}/>

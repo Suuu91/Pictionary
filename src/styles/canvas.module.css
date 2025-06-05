@@ -1,0 +1,66 @@
+#canvas {
+  display: flex;
+}
+
+#drawingUtili {
+  display: flex;
+  flex-direction: column;
+  margin-right: 30px;
+  margin-top: 200px;
+  margin-left: 30px;
+  font-size: 20px;
+}
+
+#colorSpan {
+  margin-Left:15px;
+}
+
+#strokeSize {
+  margin-Top:20px;
+}
+
+#undo {
+  width:180px; 
+  margin-Top:50px
+}
+
+#clear {
+  width:180px
+}
+
+#drawingCanvas {
+  border: 5px solid #000;
+  border-radius: 50px;
+  cursor: crosshair;
+  background-Color: white;
+  display: block;
+  margin: 0 auto;
+}
+
+#chat {
+  margin-Top: 10px;
+  margin-bottom: 10px;
+  margin-Left: 20px;
+  overflow-Y: auto;
+  border: 3px solid #ccc;
+  border-radius: 10px;
+  padding: 10p;
+  background-Color: #f9f9f9;
+  height: 550px;
+  width: 200px;
+}
+
+#messages {
+  margin-Bottom:5px
+}
+
+#chatBar {
+  width: 200;
+  margin-Left: 30px;
+  padding: 8px 
+}
+
+#sendButton {
+  width: 200px;
+  margin-Left: 25px
+}

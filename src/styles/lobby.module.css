@@ -1,0 +1,34 @@
+#alllobby {
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  margin-top: 100px;
+}
+
+#lobbylist {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 300px; 
+  overflow: auto; 
+  scrollbar-width: none;
+  border: 2px solid #ccc; 
+  padding: 20px;
+  background-color: rgb(210, 219, 185);
+  border-radius: 15%;
+}
+
+#lobbylist > section {
+  background-color: #04AA6D;
+  border-radius: 50px;
+  color: white;
+  font-size: 20px;
+  margin: 4px 2px;
+  cursor: pointer;
+  width: 400px;
+}
+
+#createroom {
+  display: flex;
+  flex-direction: column;
+}

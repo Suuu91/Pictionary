@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "../styles/auth.module.css"
 
 const Login = ({setToken}) => {
   const navigate = useNavigate()
@@ -30,7 +31,7 @@ const Login = ({setToken}) => {
 
   return(
     <>
-      <form onSubmit={userLogin} id="login">
+      <form onSubmit={userLogin} id={styles.login}>
         <label>Email: </label> <input type="email" value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
         <label>Password: </label> <input type="password" value={password} onChange={(e)=>{setPassword(e.target.value)}}/>
         <button>Login</button>

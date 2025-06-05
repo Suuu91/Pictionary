@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "../styles/lobby.module.css"
 
 const Lobby = ({token}) => {
   const [allLobby, setAllLobby] = useState([]);
@@ -48,17 +49,17 @@ const Lobby = ({token}) => {
   return (
     <>
     <h1>All Lobbies</h1>
-    <section id="alllobby">
+    <section id={styles.alllobby}>
       <section>
         <button style={{display:isButtonVisible}} onClick={getInputBar}>Create Lobby</button>
-        <form style={{display:isInputVisible}} id="createroom" onSubmit={createLobby}>
+        <form style={{display:isInputVisible}} id={styles.createroom} onSubmit={createLobby}>
           <label>Party Name :</label> <input onChange={(e)=>{setPartyName(e.target.value)}}></input>
-          <button id="createroom">Create</button>
+          <button id={styles.createroom}>Create</button>
         </form>
       </section>
-      <h3 id="or">OR</h3>
-      <section id="lobbylist">
-        <h3>Join a Lobby</h3>
+      <h3>OR</h3>
+      <section id={styles.lobbylist}>
+          <h3>Join a Lobby</h3>
         {
           allLobby.map((singleLobby) => {
             const goSingleLobby = () => {
