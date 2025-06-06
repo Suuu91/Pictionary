@@ -4,8 +4,11 @@ const cors = require('cors');
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io"); 
+
 const app = express();
 const port = process.env.PORT || 4000;
+
+const {Router: authenticate, jwtMiddleware} = require("./api/auth")
 
 app.use(cors({ 
   origin: [
@@ -19,7 +22,8 @@ app.use(cors({
 app.use(express.json())
 app.use(require("morgan")("dev"));
 
-app.use(require("./api/auth").router);
+app.use(jwtMiddleware)
+app.use(authenticate);
 app.use(require("./api/lobby"));
 
 app.use((req, res, next) => {
@@ -51,7 +55,11 @@ io.on("connection", (socket) => {
     socket.join(roomId);
     console.log (`user ${username} has joined the room ${roomId}`);
 
-    socket.to(roomId).emit
+    socket.to(roomId).emit(`user joined, ${username}`)
+
+    socket.on("disconnect", () => {
+      console.log("User disconnected:", socket.id);
+    });
   })
 })
 

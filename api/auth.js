@@ -1,5 +1,4 @@
 const router = require("express").Router()
-
 const JWT_SECRET = process.env.JWT_SECRET
 const jwt = require("jsonwebtoken")
 const prisma = require("../prisma")
@@ -8,23 +7,23 @@ const createToken = (id) => {
   return jwt.sign({id}, JWT_SECRET, {expiresIn:"1d"})
 };
 
-router.use(async(req, res, next) => {
-  const userHeader = req.headers.authorization
-  const token = userHeader?.slice(7)
-  if(!token) {
-    return next()
-  }
-  try {
-    const {id} =jwt.verify(token, JWT_SECRET)
-    const user = await prisma.user.findUniqueOrThrow({
-      where:{id}
-    })
-    req.user = user
+const jwtMiddleware = async (req, res, next) => {
+    const userHeader = req.headers.authorization
+    const token = userHeader?.slice(7)
+    if(!token) {
+      return next()
+    }
+    try {
+      const {id} =jwt.verify(token, JWT_SECRET)
+      const user = await prisma.user.findUniqueOrThrow({
+        where:{id}
+      })
+      if(user) req.user = user
+    } catch (error) {
+      console.error(error.message)
+    }
     next()
-  } catch (error) {
-    next(error)
-  }
-});
+  };
 
 router.post("/register", async(req, res, next) => {
   const {email, username, password} = req.body
@@ -59,4 +58,4 @@ const authenticate = (req, res, next) => {
   }
 };
 
-module.exports = {router, authenticate}
+module.exports = {router, authenticate, jwtMiddleware}

@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express.Router();
-module.exports = router;
-
 const prisma = require("../prisma")
 const {authenticate} = require("./auth")
 
@@ -34,3 +32,5 @@ router.post("/lobby", authenticate, async (req, res, next) => {
     next(error);
   }
 })
+
+module.exports = router;
