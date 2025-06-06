@@ -1,0 +1,11 @@
+#profnav{
+  display: flex;
+  justify-content: end;
+  margin-right: 50px;
+  font-size: x-large;
+}
+
+#prof:hover{
+  color: #13c092;
+  cursor:pointer;
+}
