@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/lobby.module.css"
+import ProfNav from "./profNav";
 
 const Lobby = ({token}) => {
   const [allLobby, setAllLobby] = useState([]);
@@ -48,6 +49,7 @@ const Lobby = ({token}) => {
 
   return (
     <>
+    <ProfNav/>
     <h1>All Lobbies</h1>
     <section id={styles.alllobby}>
       <section>
