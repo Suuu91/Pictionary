@@ -24,6 +24,14 @@ const jwtMiddleware = async (req, res, next) => {
     }
     next()
   };
+  
+  const authenticate = (req, res, next) => {
+    if (req.user) {
+      next()
+    } else {
+      next({status:401, message:"Please log in"})
+    }
+  };
 
 router.post("/register", async(req, res, next) => {
   const {email, username, password} = req.body
@@ -49,13 +57,5 @@ router.post("/login", async(req, res, next) => {
     next(error)
   }
 });
-
-const authenticate = (req, res, next) => {
-  if (req.user) {
-    next()
-  } else {
-    next({status:401, message:"Please log in"})
-  }
-};
 
 module.exports = {router, authenticate, jwtMiddleware}

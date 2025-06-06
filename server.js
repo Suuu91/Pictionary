@@ -8,8 +8,6 @@ const { Server } = require("socket.io");
 const app = express();
 const port = process.env.PORT || 4000;
 
-const {authenticate, jwtMiddleware} = require("./api/auth")
-
 app.use(cors({ 
   origin: [
     "https://pictionaryplay.netlify.app",
@@ -22,8 +20,7 @@ app.use(cors({
 app.use(express.json())
 app.use(require("morgan")("dev"));
 
-app.use(jwtMiddleware)
-app.use(authenticate);
+app.use(require("./api/auth").router)
 app.use(require("./api/lobby"));
 
 app.use((req, res, next) => {

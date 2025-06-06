@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const prisma = require("../prisma")
-const {authenticate} = require("./auth")
+const {jwtMiddleware, authenticate} = require("./auth")
 
 router.get("/lobby", async (req, res, next) => {
   try {
@@ -13,7 +13,7 @@ router.get("/lobby", async (req, res, next) => {
   };
 })
 
-router.post("/lobby", authenticate, async (req, res, next) => {
+router.post("/lobby", jwtMiddleware, authenticate, async (req, res, next) => {
   const {name} = req.body
   const user = req.user
   try {
