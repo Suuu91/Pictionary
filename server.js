@@ -8,7 +8,7 @@ const { Server } = require("socket.io");
 const app = express();
 const port = process.env.PORT || 4000;
 
-const {Router: authenticate, jwtMiddleware} = require("./api/auth")
+const {authenticate, jwtMiddleware} = require("./api/auth")
 
 app.use(cors({ 
   origin: [
