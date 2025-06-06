@@ -41,8 +41,9 @@ const Lobby = ({token}) => {
     console.log(newLobby)
     if (res.ok) {
       navigate(`/lobby/${newLobby.lobby.id}`)
-    }
-    else {
+    } else if (res.status === 401) {
+    alert("You must be logged in to create a lobby");
+    } else {
       alert("please enter a valid party name")
     }
   }
