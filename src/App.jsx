@@ -20,7 +20,7 @@ function App() {
         <Route path="/login" element={<Login setToken={setToken}/>}/>
         <Route path="/lobby" element={<Lobby token={token}/>}/> 
         <Route path="/game" element={<Game/>}/>
-        <Route path="/profile" element={<Profile setToken={setToken}/>}/>
+        <Route path="/profile" element={<Profile token={token} setToken={setToken}/>}/>
       </Routes> 
     </>
   )
