@@ -7,7 +7,12 @@ router.get("/user/:id", jwtMiddleware, authenticate, async (req, res, next) => {
   const userId = Number(req.params.id)
   try {
     const user = await prisma.user.findUniqueOrThrow({
-      where:{id:userId}
+      where:{id:userId},
+      select:{
+        id:true,
+        email:true,
+        username:true
+      }
     });
     if(user.id !== req.user.id)
       return res.status(403).send("you do not have permission to access")
