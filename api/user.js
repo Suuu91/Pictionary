@@ -17,3 +17,5 @@ router.get("/user/:id", jwtMiddleware, authenticate, async (req, res, next) => {
     next(error)
   };
 });
+
+module.exports = router;
