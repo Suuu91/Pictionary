@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const prisma = require("../prisma")
+import { jwtMiddleware, authenticate } from "./auth";
 
-router.get("/user/:id", async (req, res, next) => {
+router.get("/user/:id", jwtMiddleware, authenticate, async (req, res, next) => {
   const userId = Number(req.params.id)
   try {
     const user = await prisma.user.findUniqueOrThrow({

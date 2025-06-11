@@ -8,10 +8,13 @@ const Profile = ({setToken, token, setUserId, userId}) => {
 
   useEffect(() => {
     const getUser = async() => {
-      const res = await fetch(`https://pictionary-183l.onrender.com/user/${userId}`)
+      const res = await fetch(`https://pictionary-183l.onrender.com/user/${userId}`, {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },})
       const user = await res.json()
       setUserInfo(user)
-      console.log(user)
+      console.log(userInfo)
     };
     getUser()
   },[])
