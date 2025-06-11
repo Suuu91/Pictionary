@@ -3,7 +3,7 @@ const router = express.Router();
 const prisma = require("../prisma")
 
 router.get("/user/:id", async (req, res, next) => {
-  const userId = req.params.id
+  const userId = Number(req.params.id)
   try {
     const user = await prisma.user.findUniqueOrThrow({
       where:{id:userId}
