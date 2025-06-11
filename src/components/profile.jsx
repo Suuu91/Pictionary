@@ -10,8 +10,8 @@ const Profile = ({setToken, token, setUserId, userId}) => {
     const getUser = async() => {
       const res = await fetch(`https://pictionary-183l.onrender.com/user/${userId}`, {
   headers: {
-    Authorization: `Bearer ${token}`,
-  },})
+    Authorization: `Bearer ${token}`}
+  });
       const user = await res.json()
       setUserInfo(user)
       console.log(userInfo)

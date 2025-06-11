@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const prisma = require("../prisma")
-import { jwtMiddleware, authenticate } from "./auth";
+const {jwtMiddleware, authenticate} = require("./auth")
 
 router.get("/user/:id", jwtMiddleware, authenticate, async (req, res, next) => {
   const userId = Number(req.params.id)
