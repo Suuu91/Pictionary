@@ -22,6 +22,7 @@ app.use(require("morgan")("dev"));
 
 app.use(require("./api/auth").router)
 app.use(require("./api/lobby"));
+app.use(require("./api/user"));
 
 app.use((req, res, next) => {
   next({status:404, message: "Endpoint not found."})
