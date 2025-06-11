@@ -1,0 +1,18 @@
+const express = require("express");
+const router = express.Router();
+const prisma = require("../prisma")
+
+router.get("/user/:id", async (req, res, next) => {
+  const userId = req.params.id
+  try {
+    const user = await prisma.user.findUniqueOrThrow({
+      where:{id:userId}
+    });
+    if(user.id !== req.user.id)
+      return res.status(403).send("you do not have permission to access")
+    res.json(user)
+  } catch (error){
+    console.error("get user fail", error)
+    next(error)
+  };
+});

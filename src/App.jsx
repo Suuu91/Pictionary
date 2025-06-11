@@ -11,16 +11,17 @@ import Profile from "./components/profile"
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem(`token`))
+  const [userId, setUserId] = useState(localStorage.getItem(`userId`))
   
   return (
     <>
       <Routes>
         <Route path="/" element={<Home/>}/>
-        <Route path="/register" element={<Register setToken={setToken}/>}/>
-        <Route path="/login" element={<Login setToken={setToken}/>}/>
+        <Route path="/register" element={<Register setUserId={setUserId} setToken={setToken}/>}/>
+        <Route path="/login" element={<Login setUserId={setUserId} setToken={setToken}/>}/>
         <Route path="/lobby" element={<Lobby token={token}/>}/> 
         <Route path="/game" element={<Game/>}/>
-        <Route path="/profile" element={<Profile token={token} setToken={setToken}/>}/>
+        <Route path="/profile" element={<Profile userId={userId} setUserId={setUserId} token={token} setToken={setToken}/>}/>
       </Routes> 
     </>
   )
