@@ -2,12 +2,26 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import styles from "../styles/profile.module.css"
 
-const Profile = ({setToken, token}) => {
+const Profile = ({setToken, token, setUserId, userId}) => {
   const navigate = useNavigate()
+  const [userInfo, setUserInfo] = useState({})
+
+  useEffect(() => {
+    const getUser = async() => {
+      const res = await fetch(`https://pictionary-183l.onrender.com/user/${userId}`)
+      const user = await res.json()
+      setUserInfo(user)
+      console.log(user)
+    };
+    getUser()
+  },[])
+
   const handleLogout = () => {
     localStorage.removeItem(`token`);
-    setToken("")
-    navigate("/login")
+    localStorage.removeItem(`userId`);
+    setToken("");
+    setUserId("");
+    navigate("/login");
   }
   const navToLogin = () => {
     navigate("/login")
