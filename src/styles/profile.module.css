@@ -3,4 +3,22 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: hsla(337, 52%, 83%, 0.833);
+  border-radius: 20px;
+  text-align: center;
+}
+
+#backNav{
+  display: flex;
+  justify-content: end;
+  margin-right: 50px;
+  font-size: x-large;
+}
+
+#back:hover{
+  color: #13c092;
+  cursor:pointer;
 }

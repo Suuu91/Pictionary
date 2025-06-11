@@ -28,6 +28,10 @@ button {
   width: 300px;
 }
 
+button:hover {
+  background-color: #41c2aa;
+}
+
 body{
   padding: 25px;
   background: url(./img-src/home-background.jpg);

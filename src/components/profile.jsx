@@ -14,9 +14,8 @@ const Profile = ({setToken, token, setUserId, userId}) => {
   });
       const user = await res.json()
       setUserInfo(user)
-      console.log(userInfo)
     };
-    getUser()
+    if(token) getUser()
   },[])
 
   const handleLogout = () => {
@@ -30,12 +29,21 @@ const Profile = ({setToken, token, setUserId, userId}) => {
     navigate("/login")
   }
 
+  const handleBack = () => {
+    navigate("/lobby")
+  }
+
   return (
     <>
+      <form id={styles.backNav}>
+        <label id={styles.back} onClick={handleBack}>Back</label>
+      </form>
       {
         token ? (
           <section className={styles.profile}>
             <h1>Profile</h1>
+            <h3>User: {userInfo.username}</h3>
+            <h3>Email: {userInfo.email}</h3>
             <button onClick={handleLogout}>Logout</button>
           </section>
         ) : (
