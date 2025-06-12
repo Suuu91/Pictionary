@@ -1,5 +1,5 @@
-import { Route, Routes,useNavigate} from "react-router-dom"
-import { useState } from "react"
+import { Route, Routes, useNavigate } from "react-router-dom"
+import { useState, useEffect} from "react"
 
 import Home from "./components/home"
 import Register from "./components/register"

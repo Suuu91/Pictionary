@@ -33,6 +33,14 @@ const jwtMiddleware = async (req, res, next) => {
     }
   };
 
+router.get("/validate-token", jwtMiddleware, (req, res) => {
+  if (req.user) {
+    res.status(200).json({ valid: true, user: req.user });
+  } else {
+    res.status(401).json({ valid: false, message: "Token invalid or expired" });
+  }
+});
+
 router.post("/register", async(req, res, next) => {
   const {email, username, password} = req.body
   try {
