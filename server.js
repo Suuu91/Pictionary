@@ -13,7 +13,7 @@ app.use(cors({
     "https://pictionaryplay.netlify.app",
     'http://localhost:5173'
   ],
-  methods: 'GET,POST,PUT,DELETE', 
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'], 
   credentials: true, 
 }));
 
@@ -41,7 +41,7 @@ const io = new Server(server, {
       "https://pictionaryplay.netlify.app",
       'http://localhost:5173'
     ],
-    methods: ['GET', 'POST'],
+    methods: ['GET','POST','OPTIONS'],
     credentials: true
   }
 });
@@ -61,6 +61,6 @@ io.on("connection", (socket) => {
   })
 })
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`listening on port ${port}`)
 })
