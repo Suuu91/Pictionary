@@ -13,8 +13,11 @@ router.get("/lobby", async (req, res, next) => {
   };
 })
 
-router.get("/lobby:id", jwtMiddleware, authenticate, async (req, res, next) => {
+router.get("/lobby/:id", jwtMiddleware, authenticate, async (req, res, next) => {
   const lobbyId = Number(req.params.id)
+  if (isNaN(lobbyId)) {
+    return res.status(400).json({ error: "Invalid lobby ID" });
+  }
   try {
     const lobby = await prisma.lobby.findUniqueOrThrow({
       where: {id: lobbyId},
@@ -23,7 +26,8 @@ router.get("/lobby:id", jwtMiddleware, authenticate, async (req, res, next) => {
         name:true,
         players:true
       }
-   });
+    });
+    res.json(lobby);
   } catch (error) {
     next(error)
   }
