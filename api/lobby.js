@@ -24,7 +24,11 @@ router.get("/lobby/:id", jwtMiddleware, authenticate, async (req, res, next) => 
       select:{
         id:true,
         name:true,
-        players:true
+        players: {
+          select: {
+            username: true
+          }
+        }
       }
     });
     res.json(lobby);

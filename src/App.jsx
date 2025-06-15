@@ -51,7 +51,7 @@ function App() {
         <Route path="/register" element={<Register setUserId={setUserId} setToken={setToken}/>}/>
         <Route path="/login" element={<Login setUserId={setUserId} setToken={setToken}/>}/>
         <Route path="/lobby" element={<Lobby setLobbyId={setLobbyId} token={token}/>}/> 
-        <Route path="/lobby/:id/" element={<Game lobbyId={lobbyId}/>}/>
+        <Route path="/lobby/:id/" element={<Game token={token} lobbyId={lobbyId}/>}/>
         <Route path="/profile" element={<Profile userId={userId} setUserId={setUserId} token={token} setToken={setToken}/>}/>
       </Routes> 
     </>
