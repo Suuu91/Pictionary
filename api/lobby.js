@@ -13,6 +13,22 @@ router.get("/lobby", async (req, res, next) => {
   };
 })
 
+router.get("/lobby:id", jwtMiddleware, authenticate, async (req, res, next) => {
+  const lobbyId = Number(req.params.id)
+  try {
+    const lobby = await prisma.lobby.findUniqueOrThrow({
+      where: {id: lobbyId},
+      select:{
+        id:true,
+        name:true,
+        players:true
+      }
+   });
+  } catch (error) {
+    next(error)
+  }
+})
+
 router.post("/lobby", jwtMiddleware, authenticate, async (req, res, next) => {
   const {name} = req.body
   const user = req.user
