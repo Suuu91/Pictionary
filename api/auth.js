@@ -9,7 +9,7 @@ const createToken = (id) => {
 
 const jwtMiddleware = async (req, res, next) => {
     const userHeader = req.headers.authorization
-    const token = userHeader?.slice(7)
+    const token = userHeader?.split(" ")[1]
     if(!token) {
       return next()
     }
