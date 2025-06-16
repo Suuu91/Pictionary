@@ -13,6 +13,27 @@ router.get("/lobby", async (req, res, next) => {
   };
 })
 
+
+router.post("/lobby", jwtMiddleware, authenticate, async (req, res, next) => {
+  const {name} = req.body
+  const user = req.user
+  try {
+    const addedLobby = await prisma.lobby.create({
+      data: {
+        name,
+        players: {
+          connect: {
+            id:user.id
+          }
+        }
+      }
+    });
+    res.status(201).json({lobby:addedLobby})
+  } catch (error) {
+    next(error);
+  }
+})
+
 router.get("/lobby/:id", jwtMiddleware, authenticate, async (req, res, next) => {
   const lobbyId = Number(req.params.id)
   if (isNaN(lobbyId)) {
@@ -37,24 +58,32 @@ router.get("/lobby/:id", jwtMiddleware, authenticate, async (req, res, next) => 
   }
 })
 
-router.post("/lobby", jwtMiddleware, authenticate, async (req, res, next) => {
-  const {name} = req.body
-  const user = req.user
+router.post("/lobby/:id", jwtMiddleware, authenticate, async (req, res, next) => {
+  const lobbyId = Number(req.params.id);
+  const userId = req.user.id;
   try {
-    const addedLobby = await prisma.lobby.create({
-      data: {
-        name,
+    const lobby = await prisma.lobby.findUniqueOrThrow({
+      where: { id: lobbyId },
+      include: {
         players: {
-          connect: {
-            id:user.id
-          }
+          select: { id: true }
         }
       }
     });
-    res.status(201).json({lobby:addedLobby})
-  } catch (error) {
-    next(error);
+    if (lobby.players.length >= 2) {
+      return res.status(403).json({ error: "Lobby is full. Maximum of 2 players allowed." });
+    }
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+    await prisma.user.update({
+      where: { id: userId },
+      data: { lobbyId: lobbyId }
+    });
+    return res.status(200).json({ message: "Joined lobby successfully" });
+  } catch (err) {
+    next(err);
   }
-})
+});
 
 module.exports = router;
