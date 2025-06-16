@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Canvas from "./canvas";
 
-const Game = ({lobbyId, token})  => {
+const Game = ({token})  => {
   const [lobbyInfo, setLobbyInfo] = useState({})
+  const { id: lobbyId } = useParams();
+
   useEffect(()=> {
     const getLobbyInfo = async() => {
       const res = await fetch (`https://pictionary-183l.onrender.com/lobby/${lobbyId}`,{

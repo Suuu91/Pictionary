@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "../styles/lobby.module.css"
 import ProfNav from "./profNav";
 
-const Lobby = ({token, setLobbyId}) => {
+const Lobby = ({token}) => {
   const [allLobby, setAllLobby] = useState([]);
   const [isButtonVisible, setISButtonVisible] = useState("");
   const [isInputVisible, setIsInputVisible] = useState("none");
@@ -39,7 +39,6 @@ const Lobby = ({token, setLobbyId}) => {
     });
     const newLobby = await res.json()
     if (res.ok) {
-      setLobbyId(newLobby.lobby.id)
       navigate(`/lobby/${newLobby.lobby.id}`)
     } else if (res.status === 401) {
     alert("You must be logged in to create a lobby");
@@ -47,6 +46,25 @@ const Lobby = ({token, setLobbyId}) => {
       alert("please enter a valid party name")
     }
   }
+
+const joinLobby = async (lobby) => {
+  try {
+    const res = await fetch(`https://pictionary-183l.onrender.com/lobby/${lobby}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      }
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      alert(err.error);
+      return;
+    } else  navigate(`/lobby/${lobby}`)
+  } catch (err) {
+    console.error("Join failed", err);
+  }
+};
 
   return (
     <>
@@ -66,8 +84,7 @@ const Lobby = ({token, setLobbyId}) => {
         {
           allLobby.map((singleLobby) => {
             const goSingleLobby = () => {
-              setLobbyId(singleLobby.id)
-              navigate(`/lobby/${singleLobby.id}`)
+              joinLobby(singleLobby.id)
             }
             return (
               <section key={singleLobby.id} onClick={goSingleLobby}>

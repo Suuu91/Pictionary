@@ -73,9 +73,6 @@ router.post("/lobby/:id", jwtMiddleware, authenticate, async (req, res, next) =>
     if (lobby.players.length >= 2) {
       return res.status(403).json({ error: "Lobby is full. Maximum of 2 players allowed." });
     }
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-    });
     await prisma.user.update({
       where: { id: userId },
       data: { lobbyId: lobbyId }
