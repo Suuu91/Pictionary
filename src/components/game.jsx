@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import styles from "../styles/game.module.css"
 import Canvas from "./canvas";
 
 const Game = ({token})  => {
   const [lobbyInfo, setLobbyInfo] = useState({})
   const [permission, SetPermission] = useState(true)
+  const [showPopup, setShowPopup] = useState(false)
+  const navigate = useNavigate()
   const { id: lobbyId } = useParams();
 
   useEffect(()=> {
@@ -15,7 +18,6 @@ const Game = ({token})  => {
       })
       if (res.status === 403) {
         SetPermission(false)
-        alert("No permission, you are not in this room.");
         return;
       } 
       const currentLobby = await res.json()
@@ -24,18 +26,37 @@ const Game = ({token})  => {
     getLobbyInfo()
   },[lobbyId, token])
 
+  const handleYes = () => {
+    navigate("/lobby")
+  }
+  const handleNo = () => {
+    setShowPopup(false)
+  }
+
   return (
     <>
-    {
-      !permission || !token ?(
-        <h1>No Permission, please log in or join room</h1>
-      ):(
-        <>
-          <h1>{lobbyInfo.name}</h1>
-          <Canvas/>
-        </>
-      )
-    }
+      <form id={styles.navBack}>
+        <label id={styles.backButton} onClick={()=>setShowPopup(true)}>Exit</label>
+      </form>
+      {
+        !permission || !token ?(
+          <h1>No Permission, please log in or join room</h1>
+        ):(
+          <>
+            <h1>{lobbyInfo.name}</h1>
+            <Canvas/>
+          </>
+        )
+      }
+      {showPopup && (
+        <div id={styles.popUp}>
+          <div>
+            <p>Drawing will not be saved, are you sure you want to exit?</p>
+            <button onClick={handleYes}>Yes</button>
+            <button onClick={handleNo}>No</button>
+          </div>
+        </div>
+      )}
     </>
   )
 }

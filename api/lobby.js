@@ -13,7 +13,6 @@ router.get("/lobby", async (req, res, next) => {
   };
 })
 
-
 router.post("/lobby", jwtMiddleware, authenticate, async (req, res, next) => {
   const {name} = req.body
   const user = req.user
