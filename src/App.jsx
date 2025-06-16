@@ -12,7 +12,6 @@ import Profile from "./components/profile"
 function App() {
   const [token, setToken] = useState(localStorage.getItem(`token`))
   const [userId, setUserId] = useState(localStorage.getItem(`userId`))
-  const [lobbyId, setLobbyId] = useState("")
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -50,8 +49,8 @@ function App() {
         <Route path="/" element={<Home/>}/>
         <Route path="/register" element={<Register setUserId={setUserId} setToken={setToken}/>}/>
         <Route path="/login" element={<Login setUserId={setUserId} setToken={setToken}/>}/>
-        <Route path="/lobby" element={<Lobby setLobbyId={setLobbyId} token={token}/>}/> 
-        <Route path="/lobby/:id/" element={<Game token={token} lobbyId={lobbyId}/>}/>
+        <Route path="/lobby" element={<Lobby token={token}/>}/> 
+        <Route path="/lobby/:id/" element={<Game token={token}/>}/>
         <Route path="/profile" element={<Profile userId={userId} setUserId={setUserId} token={token} setToken={setToken}/>}/>
       </Routes> 
     </>
