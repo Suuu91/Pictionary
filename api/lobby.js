@@ -36,25 +36,40 @@ router.post("/lobby", jwtMiddleware, authenticate, async (req, res, next) => {
 
 router.get("/lobby/:id", jwtMiddleware, authenticate, async (req, res, next) => {
   const lobbyId = Number(req.params.id)
+  const userId = req.user.id
   if (isNaN(lobbyId)) {
     return res.status(400).json({ error: "Invalid lobby ID" });
   }
-  try {
+   try {
+    const userInLobby = await prisma.lobby.findFirst({
+      where: {
+        id: lobbyId,
+        players: {
+          some: {
+            id: userId
+          }
+        }
+      }
+    });
+    if (!userInLobby) {
+      return res.status(403).json({ error: "Access denied: User not in this lobby" });
+    }
     const lobby = await prisma.lobby.findUniqueOrThrow({
-      where: {id: lobbyId},
-      select:{
-        id:true,
-        name:true,
+      where: { id: lobbyId },
+      select: {
+        id: true,
+        name: true,
         players: {
           select: {
-            username: true
+            id: true,
+            name: true
           }
         }
       }
     });
     res.json(lobby);
   } catch (error) {
-    next(error)
+    next(error);
   }
 })
 

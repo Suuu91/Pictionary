@@ -4,6 +4,7 @@ import Canvas from "./canvas";
 
 const Game = ({token})  => {
   const [lobbyInfo, setLobbyInfo] = useState({})
+  const [permission, SetPermission] = useState(true)
   const { id: lobbyId } = useParams();
 
   useEffect(()=> {
@@ -12,6 +13,11 @@ const Game = ({token})  => {
         headers: {
           Authorization: `Bearer ${token}`}
       })
+      if (res.status === 403) {
+        SetPermission(false)
+        alert("No permission, you are not in this room.");
+        return;
+      } 
       const currentLobby = await res.json()
       setLobbyInfo(currentLobby)
     }
@@ -20,8 +26,16 @@ const Game = ({token})  => {
 
   return (
     <>
-      <h1>{lobbyInfo.name}</h1>
-      <Canvas/>
+    {
+      !permission || !token ?(
+        <h1>No Permission, please log in or join room</h1>
+      ):(
+        <>
+          <h1>{lobbyInfo.name}</h1>
+          <Canvas/>
+        </>
+      )
+    }
     </>
   )
 }
