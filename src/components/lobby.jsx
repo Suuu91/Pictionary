@@ -58,7 +58,7 @@ const joinLobby = async (lobby) => {
     });
     if (!res.ok) {
       const err = await res.json();
-      alert(err.error);
+      alert(err.error || "Failed to join, please make sure you are logged in.");
       return;
     } else  navigate(`/lobby/${lobby}`)
   } catch (err) {
@@ -68,33 +68,33 @@ const joinLobby = async (lobby) => {
 
   return (
     <>
-    <ProfNav/>
-    <h1>All Lobbies</h1>
-    <section id={styles.alllobby}>
-      <section>
-        <button style={{display:isButtonVisible}} onClick={getInputBar}>Create Lobby</button>
-        <form style={{display:isInputVisible}} id={styles.createroom} onSubmit={createLobby}>
-          <label>Party Name :</label> <input onChange={(e)=>{setPartyName(e.target.value)}}></input>
-          <button id={styles.createroom}>Create</button>
-        </form>
+      <ProfNav/>
+      <h1>All Lobbies</h1>
+      <section id={styles.alllobby}>
+        <section>
+          <button style={{display:isButtonVisible}} onClick={getInputBar}>Create Lobby</button>
+          <form style={{display:isInputVisible}} id={styles.createroom} onSubmit={createLobby}>
+            <label>Party Name :</label> <input onChange={(e)=>{setPartyName(e.target.value)}}></input>
+            <button id={styles.createroom}>Create</button>
+          </form>
+        </section>
+        <h3>OR</h3>
+        <section id={styles.lobbylist}>
+            <h3>Join a Lobby</h3>
+          {
+            allLobby.map((singleLobby) => {
+              const goSingleLobby = () => {
+                joinLobby(singleLobby.id)
+              }
+              return (
+                <section key={singleLobby.id} onClick={goSingleLobby}>
+                  <ul>{singleLobby.name}</ul>
+                </section>
+              )
+            })
+          }
+        </section>
       </section>
-      <h3>OR</h3>
-      <section id={styles.lobbylist}>
-          <h3>Join a Lobby</h3>
-        {
-          allLobby.map((singleLobby) => {
-            const goSingleLobby = () => {
-              joinLobby(singleLobby.id)
-            }
-            return (
-              <section key={singleLobby.id} onClick={goSingleLobby}>
-                <ul>{singleLobby.name}</ul>
-              </section>
-            )
-          })
-        }
-      </section>
-    </section>
     </>
   )
 }
