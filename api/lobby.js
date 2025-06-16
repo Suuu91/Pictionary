@@ -87,6 +87,10 @@ router.post("/lobby/:id", jwtMiddleware, authenticate, async (req, res, next) =>
         }
       }
     });
+    const alreadyInLobby = lobby.players.some(player => player.id === userId);
+    if (alreadyInLobby) {
+      return res.status(200).json({ message: "User already in lobby" });
+    }
     if (lobby.players.length >= 2) {
       return res.status(403).json({ error: "Lobby is full. Maximum of 2 players allowed." });
     }
@@ -94,7 +98,7 @@ router.post("/lobby/:id", jwtMiddleware, authenticate, async (req, res, next) =>
       where: { id: userId },
       data: { lobbyId: lobbyId }
     });
-    return res.status(200).json({ message: "Joined lobby successfully" });
+    return res.status(200).json({ message: "Joined lobby" });
   } catch (err) {
     next(err);
   }
