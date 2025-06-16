@@ -99,9 +99,30 @@ router.post("/lobby/:id", jwtMiddleware, authenticate, async (req, res, next) =>
       data: { lobbyId: lobbyId }
     });
     return res.status(200).json({ message: "Joined lobby" });
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
+});
+
+router.post("lobby/:id/leave", jwtMiddleware, authenticate, async(req, res, next)=>{
+  const lobbyId = Number(req.params.id)
+  const userId = req.user.id
+  if (isNaN(lobbyId)) {
+    return res.status(400).json({ error: "Invalid lobby ID" });
+  };
+  try {
+    const user = await prisma.user.findUnique({where:{id:userId}})
+    if (user.lobbyId !== lobbyId) {
+      return res.status(403).json({ error: "You are not in this lobby" });
+    };
+    await prisma.user.update({
+      where: {id: userId},
+      data: {lobbyId: null}
+    });
+    res.status(200).json({ message: "left lobby" });
+  } catch (error) {
+    next(error)
+  };
 });
 
 module.exports = router;

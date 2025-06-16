@@ -26,12 +26,24 @@ const Game = ({token})  => {
     getLobbyInfo()
   },[lobbyId, token])
 
-  const handleYes = () => {
+  const handleYes = async() => {
+    try {
+      await fetch(`https://pictionary-183l.onrender.com/lobby/${lobbyId}/leave`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+      });
+    } catch (error) {
+      console.error("Leave lobby failed", error);
+    }
     navigate("/lobby")
-  }
+  };
+
   const handleNo = () => {
     setShowPopup(false)
-  }
+  };
 
   return (
     <>
