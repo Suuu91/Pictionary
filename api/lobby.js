@@ -104,7 +104,7 @@ router.post("/lobby/:id", jwtMiddleware, authenticate, async (req, res, next) =>
   }
 });
 
-router.post("lobby/:id/leave", jwtMiddleware, authenticate, async(req, res, next)=>{
+router.post("/lobby/:id/leave", jwtMiddleware, authenticate, async(req, res, next)=>{
   const lobbyId = Number(req.params.id)
   const userId = req.user.id
   if (isNaN(lobbyId)) {
