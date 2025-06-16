@@ -54,7 +54,7 @@ router.get("/lobby/:id", jwtMiddleware, authenticate, async (req, res, next) => 
     if (!userInLobby) {
       return res.status(403).json({ error: "Access denied: User not in this lobby" });
     }
-    const lobby = await prisma.lobby.findUniqueOrThrow({
+    const lobby = await prisma.lobby.findUnique({
       where: { id: lobbyId },
       select: {
         id: true,
@@ -62,11 +62,14 @@ router.get("/lobby/:id", jwtMiddleware, authenticate, async (req, res, next) => 
         players: {
           select: {
             id: true,
-            name: true
+            username: true
           }
         }
       }
     });
+    if (!lobby) {
+      return res.status(404).json({ error: "Lobby not found" });
+    } 
     res.json(lobby);
   } catch (error) {
     next(error);
