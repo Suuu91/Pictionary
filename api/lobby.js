@@ -125,4 +125,29 @@ router.post("/lobby/:id/leave", jwtMiddleware, authenticate, async(req, res, nex
   };
 });
 
+router.post("/lobby/:id/title", jwtMiddleware, authenticate, async(req, res, next)=>{
+  const lobbyId = Number(req.params.id)
+  const requser = req.user
+  const {title} = req.body
+  if (isNaN(lobbyId)) {
+    return res.status(400).json({ error: "Invalid lobby ID" });
+  };
+  try {
+    const user = await prisma.user.findUnique({where:{id:requser.id}});
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    };
+    if (user.lobbyId !== lobbyId) {
+      return res.status(403).json({ error: "You are not in this lobby" });
+    };
+    const updatedLobby = await prisma.lobby.update({
+      where:{id:lobbyId},
+      data: {title:title}
+    });
+    return res.status(200).json({message:`title set for room ${lobbyId}`, lobby:updatedLobby})
+  } catch (error) {
+    next(error)
+  };
+});
+
 module.exports = router;
