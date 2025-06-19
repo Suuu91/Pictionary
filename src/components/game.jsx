@@ -8,13 +8,16 @@ const Game = ({token})  => {
   const [permission, SetPermission] = useState(true)
   const [showPopup, setShowPopup] = useState(false)
   const [showTopicInput, setShowTopicInput] = useState(false)
+  const [topicToAdd, setTopicToAdd] = useState("")
   const [drawingTopic, setDrawingTopic] = useState("")
   const inputRef = useRef(null)
   const navigate = useNavigate()
   const { id: lobbyId } = useParams();
 
   useEffect(()=> {
-    if(token && permission) {setShowTopicInput(true)};
+    if(token && permission) {
+      if(!drawingTopic) {setShowTopicInput(true)}
+    };
     const getLobbyInfo = async() => {
       const res = await fetch (`https://pictionary-183l.onrender.com/lobby/${lobbyId}`,{
         headers: {
@@ -26,6 +29,7 @@ const Game = ({token})  => {
       } 
       const currentLobby = await res.json()
       setLobbyInfo(currentLobby)
+      console.log(currentLobby)
     }
     getLobbyInfo()
   },[lobbyId, token])
@@ -48,10 +52,21 @@ const Game = ({token})  => {
   const handleNo = () => 
     setShowPopup(false)
 
-  const handleTopicSet = () => {
+  const handleTopicSet = async() => {
+    const res = await fetch(`https://pictionary-183l.onrender.com/lobby/${lobbyId}/title`, {
+      method:"POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        title:topicToAdd
+      })
+    })
+    const lobbyInfo = await res.json()
+    setDrawingTopic(lobbyInfo.lobby.title)
     setShowTopicInput(false)
   }
-  
 
   return (
     <>
@@ -68,6 +83,7 @@ const Game = ({token})  => {
        ):(
          <>
           <h1>{lobbyInfo.name}</h1>
+          <h3>{drawingTopic}</h3>
           <Canvas/>
          </>
       )}
@@ -90,7 +106,7 @@ const Game = ({token})  => {
               ref={inputRef}
               type="text"
               placeholder="Enter your topic here"
-              onChange={(e)=>{setDrawingTopic(e.target.value)}}
+              onChange={(e)=>{setTopicToAdd(e.target.value)}}
             />
             <div id={styles.topicButton}>
               <button onClick={handleTopicSet}>Submit</button>
