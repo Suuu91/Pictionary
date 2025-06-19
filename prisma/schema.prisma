@@ -21,9 +21,7 @@ model User {
   lobbyId Int?
   lobby Lobby? @relation(fields: [lobbyId], references: [id])
   joinedAt DateTime @default(now())
-  score Int? @default(0)
-  rounds Round[] @relation("RoundUsers")
-  drawerStatus Boolean @default(false) //has the player participated as a drawer
+  drawings Drawing []
 }
 
 model Subject {
@@ -34,27 +32,20 @@ model Subject {
 model Lobby {
   id Int @id @default(autoincrement())
   name String 
+  title String?
   players User[]
-  gameStarted Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  gameStatus String @default("pending") //pending, in-progress, completed
-  rounds Round[]
-  currentRoundId Int?
 }
 
-model Round {
+model Drawing {
   id Int @id @default(autoincrement())
-  roundNumber Int
-  lobbyId Int
-  lobby Lobby @relation(fields: [lobbyId], references: [id])
-  roundStartTime    DateTime  
-  roundEndTime      DateTime  
-  roundTimeLimit    Int       
-  roundStatus       String    @default("pending")//pending, in-progress, completed 
-  playersInRound User[] @relation("RoundUsers")
+  name String
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  imageUrl String
+  createdAt DateTime @default(now())
 }
-
 
 
 
