@@ -6,7 +6,7 @@
   font-size: xxx-large;
 }
 
-#backButton:hover{
+#backButton:hover, #topic:hover{
   color: #13c092;
   cursor:pointer;
 }
@@ -41,6 +41,8 @@
 }
 
 #topicInputBar {
+  display: flex;
+  flex-direction: column;
   background-color: rgb(189, 237, 240);
   padding: 2rem;
   border: 5px dashed #df92b5;
@@ -57,4 +59,40 @@
   margin-bottom: 2rem;
   border: 2px solid #157bb7;
   border-radius: 25px;
+  align-self: center;
+}
+
+#topicShown {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#topicForm {
+  display: flex;
+  justify-content: center;
+  margin-top: -45px;
+  margin-bottom: 20px;
+}
+
+#topic {
+  text-align: center;
+  font-size: 40px;
+}
+
+#xButton, #getRandomTopic{
+  align-self: flex-end;
+  font-size: 25px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+#randomTopicForm {
+  font-size: 25px;
+  display: inline-block;
+}
+
+#xButton:hover, #randomTopicForm:hover {
+  transform: scale(1.3);
+  transition: transform 0.3s ease;
 }
