@@ -15,9 +15,6 @@ const Game = ({token})  => {
   const { id: lobbyId } = useParams();
 
   useEffect(()=> {
-    if(token && permission) {
-      if(!drawingTopic) {setShowTopicInput(true)}
-    };
     const getLobbyInfo = async() => {
       const res = await fetch (`https://pictionary-183l.onrender.com/lobby/${lobbyId}`,{
         headers: {
@@ -29,8 +26,11 @@ const Game = ({token})  => {
       } 
       const currentLobby = await res.json()
       setLobbyInfo(currentLobby)
-      console.log(currentLobby)
-    }
+      setDrawingTopic(currentLobby.title)
+      if(token && permission) {
+        if(!currentLobby.title) {setShowTopicInput(true)}
+      };
+    };
     getLobbyInfo()
   },[lobbyId, token])
 
@@ -66,6 +66,10 @@ const Game = ({token})  => {
     const lobbyInfo = await res.json()
     setDrawingTopic(lobbyInfo.lobby.title)
     setShowTopicInput(false)
+  };
+
+  const handleGetRandom = () => {
+    console.log("clicked!")
   }
 
   return (
@@ -83,7 +87,9 @@ const Game = ({token})  => {
        ):(
          <>
           <h1>{lobbyInfo.name}</h1>
-          <h3>{drawingTopic}</h3>
+          <form id={styles.topicForm}>
+            <label id={styles.topic} onClick={()=>setShowTopicInput(true)}>{drawingTopic}</label>
+          </form>
           <Canvas/>
          </>
       )}
@@ -99,8 +105,9 @@ const Game = ({token})  => {
       )}
 
       {showTopicInput && (
-         <div id={styles.topicPopup}>
-           <div id={styles.topicInputBar}>
+        <div id={styles.topicPopup}>
+          <div id={styles.topicInputBar}>
+            <span id={styles.xButton} onClick={()=>setShowTopicInput(false)} role="button">❌</span>
             <h1>Please decide a topic to draw</h1>
             <input
               ref={inputRef}
@@ -110,8 +117,14 @@ const Game = ({token})  => {
             />
             <div id={styles.topicButton}>
               <button onClick={handleTopicSet}>Submit</button>
-             </div>
-           </div>
+            </div>
+            <div>
+              <p>Don't Have An Idea?</p>
+              <form id={styles.randomTopicForm}>
+                <label id={styles.getRandomTopic} onClick={handleGetRandom}>Get A Random Topic</label>
+              </form>
+            </div>
+          </div>
         </div>
       )}
     </>
