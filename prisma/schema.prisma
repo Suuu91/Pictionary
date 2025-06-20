@@ -18,15 +18,30 @@ model User {
   email String @unique
   username String @unique
   password String
+  role Role @default(USER)
   lobbyId Int?
   lobby Lobby? @relation(fields: [lobbyId], references: [id])
   joinedAt DateTime @default(now())
+  submissions TopicSubmit[]
   drawings Drawing []
 }
 
-model Subject {
+enum Role {
+  USER
+  ADMIN
+}
+
+model Topic {
+  id Int @id @default(autoincrement())
+  text String @unique
+}
+
+model TopicSubmit {
   id Int @id @default(autoincrement())
   text String
+  submittedBy User @relation(fields: [submittedById], references: [id])
+  submittedById Int
+  isApproved Boolean?
 }
 
 model Lobby {
