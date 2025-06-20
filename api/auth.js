@@ -25,13 +25,21 @@ const jwtMiddleware = async (req, res, next) => {
     next()
   };
   
-  const authenticate = (req, res, next) => {
-    if (req.user) {
-      next()
-    } else {
-      next({status:401, message:"Please log in"})
-    }
-  };
+const authenticate = (req, res, next) => {
+  if (req.user) {
+    next()
+  } else {
+   next({status:401, message:"Please log in"})
+  }
+};
+
+const isAdmin = (req, res, next) => {
+  if(req.user.role === "ADMIN") {
+    next();
+  } else {
+    res.status(403).json({message:"Access denied, Admins only."})
+  }
+}
 
 router.get("/validate-token", jwtMiddleware, (req, res) => {
   if (req.user) {
@@ -66,4 +74,4 @@ router.post("/login", async(req, res, next) => {
   }
 });
 
-module.exports = {router, authenticate, jwtMiddleware}
+module.exports = {router, authenticate, jwtMiddleware, isAdmin}
