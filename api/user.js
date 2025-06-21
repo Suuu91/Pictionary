@@ -11,7 +11,8 @@ router.get("/user/:id", jwtMiddleware, authenticate, async (req, res, next) => {
       select:{
         id:true,
         email:true,
-        username:true
+        username:true,
+        role:true
       }
     });
     if(user.id !== req.user.id)
