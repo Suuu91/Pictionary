@@ -5,6 +5,7 @@ import styles from "../styles/profile.module.css"
 const Profile = ({setToken, token, setUserId, userId}) => {
   const navigate = useNavigate()
   const [userInfo, setUserInfo] = useState({})
+  const [showTopicSubmit, setShowTopicSubmit] = useState(false)
 
   useEffect(() => {
     const getUser = async() => {
@@ -14,6 +15,7 @@ const Profile = ({setToken, token, setUserId, userId}) => {
   });
       const user = await res.json()
       setUserInfo(user)
+      console.log(user)
     };
     if(token) getUser()
   },[])
@@ -22,9 +24,10 @@ const Profile = ({setToken, token, setUserId, userId}) => {
     localStorage.removeItem(`token`);
     localStorage.removeItem(`userId`);
     setToken("");
-    setUserId("");
+    setUserId("");a
     navigate("/login");
   }
+
   const navToLogin = () => {
     navigate("/login")
   }
@@ -38,21 +41,19 @@ const Profile = ({setToken, token, setUserId, userId}) => {
       <form id={styles.backNav}>
         <label id={styles.back} onClick={handleBack}>Back</label>
       </form>
-      {
-        token ? (
-          <section className={styles.profile}>
-            <h1>Profile</h1>
-            <h3>User: {userInfo.username}</h3>
-            <h3>Email: {userInfo.email}</h3>
-            <button onClick={handleLogout}>Logout</button>
-          </section>
+      {token ? (
+        <div className={styles.profile}>
+          <h1>Profile</h1>
+          <h3>User: {userInfo.username}</h3>
+          <h3>Email: {userInfo.email}</h3>
+          <button onClick={handleLogout}>Logout</button>
+        </div>
         ) : (
-          <section className={styles.profile}>
+          <div className={styles.profile}>
             <h1>You are not logged in</h1>
             <button onClick={navToLogin}>Click to log in</button>
-          </section>
-        )
-      }
+          </div>
+      )}
     </>
   )
 }
