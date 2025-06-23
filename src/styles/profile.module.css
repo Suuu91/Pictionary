@@ -71,3 +71,17 @@
   cursor: pointer;
   border-radius: 50%;
 }
+
+#pendingTopics {
+  display: flex;
+  font-size: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+#pendingTopics button {
+  width: 100px;
+  height: 35px;
+  margin-left: 50px;
+  padding: 0px;
+}
