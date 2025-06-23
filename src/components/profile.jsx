@@ -87,9 +87,12 @@ const Profile = ({setToken, token, setUserId, userId}) => {
           id: topicId,
           approve: true
         })
-      })
-      const addedTopic = await res.json()
-      console.log(addedTopic)
+      });
+      if (res.ok) {
+        setAllPendingTopics(prevTopics => 
+          prevTopics.filter(topic => topic.id !== topicId)
+        )
+      }
     } catch (error) {
       console.error("Error:", error)
     };
@@ -107,9 +110,12 @@ const Profile = ({setToken, token, setUserId, userId}) => {
           id: topicId,
           approve: false
         })
-      })
-      const addedTopic = await res.json()
-      console.log(addedTopic)
+      });
+      if (res.ok) {
+        setAllPendingTopics(prevTopics => 
+          prevTopics.filter(topic => topic.id !== topicId)
+        )
+      }
     } catch (error) {
       console.error("Error:", error)
     };
