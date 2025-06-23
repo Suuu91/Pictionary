@@ -7,6 +7,7 @@ const Profile = ({setToken, token, setUserId, userId}) => {
   const [userInfo, setUserInfo] = useState({})
   const [showTopicSubmit, setShowTopicSubmit] = useState(false)
   const [topicToSub, setTopicToSub] = useState("")
+  const [allPendingTopics, setAllPendingTopics] = useState([])
 
   useEffect(() => {
     const getUser = async() => {
@@ -36,22 +37,50 @@ const Profile = ({setToken, token, setUserId, userId}) => {
     navigate("/lobby")
   }
 
-  const handleTopicSub = () => {
-    setShowTopicSubmit(true)
+  const handleTopicSub = async() => {
+    setShowTopicSubmit(true);
+    if (userInfo.role === "ADMIN") {
+      try {
+        const res = await fetch("https://pictionary-183l.onrender.com/topicsubmit", {
+          methods: "GET",
+          headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+          },
+        });
+        const allTopicsInfo = await res.json()
+        setAllPendingTopics(allTopicsInfo)
+      } catch (error) {
+        console.error("error:", error)
+      }
+    }
   }
 
   const submitTopic = async() => {
-    const res = await fetch("https://pictionary-183l.onrender.com/topicsubmit", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      },
-      body:JSON.stringify({text:topicToSub})
-    });
-    const submittedTopic = await res.json()
-    console.log(submittedTopic)
-    setShowTopicSubmit(false)
+    try {
+      const res = await fetch("https://pictionary-183l.onrender.com/topicsubmit", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body:JSON.stringify({text:topicToSub})
+      });
+      if (res.ok) {
+        alert (`Your topic has been submitted, thank you for your contribution!`)
+        setShowTopicSubmit(false)
+      }
+    } catch (error) {
+        console.error("error:", error)
+    };
+  };
+
+  const handleApprove = (text) =>{
+    console.log(`approve ${text}`)
+  };
+
+  const handleReject = (text) => {
+    console.log(`reject ${text}`)
   }
 
   return (
@@ -88,7 +117,23 @@ const Profile = ({setToken, token, setUserId, userId}) => {
       {showTopicSubmit && (
         <div>
           {userInfo.role === "ADMIN"?(
-            <h1>All Pending Topics</h1>
+            <div id={styles.topicSubPop}>
+              <div id={styles.topicSubBar}>
+                <span id={styles.xButton} onClick={()=>setShowTopicSubmit(false)} role="button">❌</span>
+                <h1>Pending Topics</h1>
+                {
+                  allPendingTopics.map((singlePendingTopic)=>{
+                    return (
+                      <div key={singlePendingTopic.id} id={styles.pendingTopics}>
+                        <span>{singlePendingTopic.text}</span>
+                        <button onClick={()=>handleApprove(singlePendingTopic.text)}>Approve</button>
+                        <button onClick={()=>handleReject(singlePendingTopic.text)}>Reject</button>
+                      </div>
+                    )
+                  })
+                }
+              </div>
+            </div>
           ): (
             <div id={styles.topicSubPop}>
               <div id={styles.topicSubBar}>

@@ -4,7 +4,11 @@ const {jwtMiddleware, authenticate, isAdmin} = require("./auth")
 
 router.get("/topicsubmit", jwtMiddleware, authenticate, isAdmin, async(req, res, next)=>{
   try {
-    const allTopicSubmit = await prisma.topicSubmit.findMany()
+    const allTopicSubmit = await prisma.topicSubmit.findMany({
+      where:{
+        isApproved:null
+      }
+    })
     res.json(allTopicSubmit)
   } catch (error) {
     next(error)
