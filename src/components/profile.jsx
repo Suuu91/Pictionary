@@ -75,12 +75,44 @@ const Profile = ({setToken, token, setUserId, userId}) => {
     };
   };
 
-  const handleApprove = (text) =>{
-    console.log(`approve ${text}`)
+  const handleApprove = async(topicId) =>{
+    try {
+      const res = await fetch("https://pictionary-183l.onrender.com/topicsubmit/approve", {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify({
+          id: topicId,
+          approve: true
+        })
+      })
+      const addedTopic = await res.json()
+      console.log(addedTopic)
+    } catch (error) {
+      console.error("Error:", error)
+    };
   };
 
-  const handleReject = (text) => {
-    console.log(`reject ${text}`)
+  const handleReject = async(topicId) => {
+    try {
+      const res = await fetch("https://pictionary-183l.onrender.com/topicsubmit/approve", {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify({
+          id: topicId,
+          approve: false
+        })
+      })
+      const addedTopic = await res.json()
+      console.log(addedTopic)
+    } catch (error) {
+      console.error("Error:", error)
+    };
   }
 
   return (
@@ -126,8 +158,8 @@ const Profile = ({setToken, token, setUserId, userId}) => {
                     return (
                       <div key={singlePendingTopic.id} id={styles.pendingTopics}>
                         <span>{singlePendingTopic.text}</span>
-                        <button onClick={()=>handleApprove(singlePendingTopic.text)}>Approve</button>
-                        <button onClick={()=>handleReject(singlePendingTopic.text)}>Reject</button>
+                        <button onClick={()=>handleApprove(singlePendingTopic.id)}>Approve</button>
+                        <button onClick={()=>handleReject(singlePendingTopic.id)}>Reject</button>
                       </div>
                     )
                   })
