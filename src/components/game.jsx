@@ -68,9 +68,23 @@ const Game = ({token})  => {
     setShowTopicInput(false)
   };
 
-  const handleGetRandom = () => {
-    console.log("clicked!")
-  }
+  const handleGetRandom = async() => {
+    try {
+      const res = await fetch("https://pictionary-183l.onrender.com/topics/random", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+      const randomTopicInfo = await res.json();
+      setDrawingTopic(randomTopicInfo.text)
+      alert(`Your Topic is ${drawingTopic}`)
+      setShowTopicInput(false)
+    } catch (error) {
+      console.error("error:", error)
+    };
+  };
 
   return (
     <>
