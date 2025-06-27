@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import styles from "../styles/game.module.css"
 import Canvas from "./canvas";
 
-const Game = ({token})  => {
+const Game = ({token, user})  => {
   const [lobbyInfo, setLobbyInfo] = useState({})
   const [permission, SetPermission] = useState(true)
   const [showPopup, setShowPopup] = useState(false)

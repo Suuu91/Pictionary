@@ -12,6 +12,7 @@ import Profile from "./components/profile"
 function App() {
   const [token, setToken] = useState(localStorage.getItem(`token`))
   const [userId, setUserId] = useState(localStorage.getItem(`userId`))
+  const [user, setUser] = useState(localStorage.getItem(`user`))
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -47,11 +48,11 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Home/>}/>
-        <Route path="/register" element={<Register setUserId={setUserId} setToken={setToken}/>}/>
-        <Route path="/login" element={<Login setUserId={setUserId} setToken={setToken}/>}/>
+        <Route path="/register" element={<Register setUser={setUser} setUserId={setUserId} setToken={setToken}/>}/>
+        <Route path="/login" element={<Login setUser={setUser} setUserId={setUserId} setToken={setToken}/>}/>
         <Route path="/lobby" element={<Lobby token={token}/>}/> 
-        <Route path="/lobby/:id/" element={<Game token={token}/>}/>
-        <Route path="/profile" element={<Profile userId={userId} setUserId={setUserId} token={token} setToken={setToken}/>}/>
+        <Route path="/lobby/:id/" element={<Game user={user} token={token}/>}/>
+        <Route path="/profile" element={<Profile setUser={setUser} userId={userId} setUserId={setUserId} token={token} setToken={setToken}/>}/>
       </Routes> 
     </>
   )

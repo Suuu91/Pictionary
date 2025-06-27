@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/auth.module.css"
 
-const Login = ({setToken,setUserId}) => {
+const Login = ({setToken, setUserId, setUser}) => {
   const navigate = useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,13 +20,16 @@ const Login = ({setToken,setUserId}) => {
     const loginMessage = await response.json();
     const accessToken = loginMessage.token;
     const loginId = loginMessage.user.id
+    const loginUser = loginMessage.user.username
     setToken(accessToken);
     setUserId(loginId);
+    setUser(loginUser)
     setEmail("")
     setPassword("")
     if (accessToken){
       localStorage.setItem('token', accessToken);
       localStorage.setItem(`userId`, loginId);
+      localStorage.setItem(`user`, loginUser);
       navigate(`/lobby`)
     }
       else{alert("Please enter valid information.")}

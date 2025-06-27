@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import styles from "../styles/profile.module.css"
 
-const Profile = ({setToken, token, setUserId, userId}) => {
+const Profile = ({setToken, token, setUserId, userId, setUser}) => {
   const navigate = useNavigate()
   const [userInfo, setUserInfo] = useState({})
   const [showTopicSubmit, setShowTopicSubmit] = useState(false)
@@ -24,8 +24,10 @@ const Profile = ({setToken, token, setUserId, userId}) => {
   const handleLogout = () => {
     localStorage.removeItem(`token`);
     localStorage.removeItem(`userId`);
+    localStorage.removeItem(`user`);
     setToken("");
     setUserId("");
+    setUser("")
     navigate("/login");
   }
 
