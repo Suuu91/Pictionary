@@ -20,7 +20,6 @@ const Register = ({setToken, setUserId, setUser}) =>{
       })
     });
     const registerMessage = await response.json();
-    console.log(registerMessage)
     const accessToken = registerMessage.token;
     const registerUserId = registerMessage.user.id
     const registerUser = registerMessage.user.username

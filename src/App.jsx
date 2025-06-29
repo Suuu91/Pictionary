@@ -33,8 +33,10 @@ function App() {
           alert(`session expired, please login again`)
           setToken(null)
           setUserId(null)
+          setUser(null)
           localStorage.removeItem("token")
           localStorage.removeItem("userId")
+          localStorage.removeItem("user")
           navigate("/")
         }
       } catch (error) {
