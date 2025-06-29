@@ -54,13 +54,20 @@ io.on("connection", (socket) => {
   socket.on("joinRoom", ({roomId, username}) => {
     socket.join(roomId);
     console.log (`user ${username} has joined the room ${roomId}`);
+    socket.to(roomId).emit("userJoined", username);
+  });
 
-    socket.to(roomId).emit(`user joined, ${username}`)
+  socket.on("drawing",({roomId, data}) => {
+    socket.to(roomId).emit("drawing", data);
+  });
 
-    socket.on("disconnect", () => {
-      console.log("User disconnected:", socket.id);
-    });
-  })
+  socket.on("chatMessage", ({roomId, message}) => {
+    socket.to(roomId).emit("chatMessage", message)
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
 })
 
 server.listen(port, () => {
