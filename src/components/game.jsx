@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "../styles/game.module.css"
 import Canvas from "./canvas";
+import socket from "./socket"
 
 const Game = ({token, user})  => {
   const [lobbyInfo, setLobbyInfo] = useState({})
@@ -78,8 +79,18 @@ const Game = ({token, user})  => {
         }
       });
       const randomTopicInfo = await res.json();
+      await fetch(`https://pictionary-183l.onrender.com/lobby/${lobbyId}/title`, {
+        method:"POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          title:randomTopicInfo.text
+        })
+      })
       setDrawingTopic(randomTopicInfo.text)
-      alert(`Your Topic is ${drawingTopic}`)
+      alert(`Your Topic is ${randomTopicInfo.text}`)
       setShowTopicInput(false)
     } catch (error) {
       console.error("error:", error)
@@ -104,7 +115,7 @@ const Game = ({token, user})  => {
           <form id={styles.topicForm}>
             <label id={styles.topic} onClick={()=>setShowTopicInput(true)}>{drawingTopic}</label>
           </form>
-          <Canvas/>
+          <Canvas user={user}/>
          </>
       )}
 

@@ -8,7 +8,6 @@ import Lobby from "./components/lobby"
 import Game from "./components/game"
 import Profile from "./components/profile"
 
-
 function App() {
   const [token, setToken] = useState(localStorage.getItem(`token`))
   const [userId, setUserId] = useState(localStorage.getItem(`userId`))
@@ -40,11 +39,11 @@ function App() {
           navigate("/")
         }
       } catch (error) {
-        console.error
+        console.error(error)
       }
     } ;
     checkToken()
-  },[])
+  },[token])
   
   return (
     <>

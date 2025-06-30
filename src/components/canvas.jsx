@@ -1,7 +1,8 @@
 import styles from "../styles/canvas.module.css"
 import { useRef, useState } from 'react';
+import socket from "./socket"
 
-const Canvas = () => {
+const Canvas = ({user}) => {
   const canvasRef = useRef(null);
   const isDrawing = useRef(false);
   const [paths, setPaths] = useState([]);
