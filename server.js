@@ -49,10 +49,12 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("a user connected", socket.id);
-
+  console.log("a user connected", socket.id)
+  
   socket.on("joinRoom", ({roomId, username}) => {
     socket.join(roomId);
+    socket.username = username
+    socket.roomId = roomId
     console.log (`user ${username} has joined the room ${roomId}`);
     socket.to(roomId).emit("userJoined", username);
   });
@@ -65,10 +67,20 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("chatMessage", message)
   });
 
+  socket.on("leaveRoom", ({roomId, username}) => {
+    socket.leave(roomId);
+    console.log(`User ${username} has left room ${roomId}`);
+    socket.to(roomId).emit("userLeft", username)
+  });
+
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
+    if (socket.roomId && socket.username) {
+      socket.to(socket.roomId).emit("userLeft", socket.username)
+      console.log(`User ${socket.username} left room ${socket.roomId}`)
+    }
   });
-})
+});
 
 server.listen(port, () => {
   console.log(`listening on port ${port}`)

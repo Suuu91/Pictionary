@@ -7,6 +7,7 @@ import Login from "./components/login"
 import Lobby from "./components/lobby"
 import Game from "./components/game"
 import Profile from "./components/profile"
+import socket from "./components/socket"
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem(`token`))
@@ -14,6 +15,21 @@ function App() {
   const [user, setUser] = useState(localStorage.getItem(`user`))
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    if (token && user && userId) {
+      const handleConnect = () => {
+        console.log(`You are connected with id: ${socket.id}`);
+      };
+      socket.on("connect", handleConnect);
+      if (!socket.connected) {
+        socket.connect()
+      }
+      return () => {
+        socket.off("connect", handleConnect);
+      };
+    } 
+  }, [token, userId, user]);
 
   useEffect(() => {
     if (!token) return;
