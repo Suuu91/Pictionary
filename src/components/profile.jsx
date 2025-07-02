@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import styles from "../styles/profile.module.css"
+import socket from "./socket";
 
 const Profile = ({setToken, token, setUserId, userId, setUser}) => {
   const navigate = useNavigate()
@@ -22,6 +23,7 @@ const Profile = ({setToken, token, setUserId, userId, setUser}) => {
   },[])
 
   const handleLogout = () => {
+    socket.disconnect()
     localStorage.removeItem(`token`);
     localStorage.removeItem(`userId`);
     localStorage.removeItem(`user`);

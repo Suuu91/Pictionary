@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/auth.module.css"
+import socket from "./socket";
 
 const Login = ({setToken, setUserId, setUser}) => {
   const navigate = useNavigate()
@@ -27,6 +28,7 @@ const Login = ({setToken, setUserId, setUser}) => {
     setEmail("")
     setPassword("")
     if (accessToken){
+      socket.connect()
       localStorage.setItem('token', accessToken);
       localStorage.setItem(`userId`, loginId);
       localStorage.setItem(`user`, loginUser);
