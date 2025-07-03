@@ -63,8 +63,8 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("drawing", data);
   });
 
-  socket.on("chatMessage", ({roomId, message}) => {
-    socket.to(roomId).emit("chatMessage", message)
+  socket.on("chatMessage", ({roomId, username, message}) => {
+    socket.to(roomId).emit("chatMessage", {username, message})
   });
 
   socket.on("leaveRoom", ({roomId, username}) => {
