@@ -1,5 +1,6 @@
 import styles from "../styles/canvas.module.css"
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useParams } from "react-router-dom";
 import socket from "./socket"
 
 const Canvas = ({user}) => {
@@ -11,6 +12,17 @@ const Canvas = ({user}) => {
   const [strokeSize, setStrokeSize] = useState(3);
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
+  const { id: lobbyId } = useParams();
+
+  useEffect(() => {
+    const handleMessage = (msg) => {
+      setChatMessages((prev) => [...prev, msg]);
+    };
+    socket.on("chatMessage", handleMessage);
+    return () => {
+      socket.off("chatMessage", handleMessage);
+    };
+  }, []);
 
   const canvasSize = {
     height: 650,
@@ -86,10 +98,11 @@ const Canvas = ({user}) => {
 
   const handleChatSubmit = (e) => {
     e.preventDefault();
-    if (chatInput.trim()) {
-      setChatMessages((prev) => [...prev, chatInput.trim()]);
-      setChatInput('');
-    }
+    const messageToSend = chatInput.trim()
+    if(!messageToSend) return;
+    setChatMessages((prev) => [...prev, messageToSend]);
+    socket.emit("chatMessage", {roomId: lobbyId, username:user, message: messageToSend})
+    setChatInput('');
   };
 
   return (
@@ -134,7 +147,7 @@ const Canvas = ({user}) => {
         <div id={styles.chat}>
           {chatMessages.map((msg, idx) => (
             <div id={styles.messages} key={idx}>
-              <strong>User:</strong> {msg}
+              <strong>{msg.username}</strong> {msg.message}
             </div>
           ))}
         </div>
