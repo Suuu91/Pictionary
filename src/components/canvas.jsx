@@ -15,8 +15,8 @@ const Canvas = ({user}) => {
   const { id: lobbyId } = useParams();
 
   useEffect(() => {
-    const handleMessage = (msg) => {
-      setChatMessages((prev) => [...prev, msg]);
+    const handleMessage = ({username, message}) => {
+      setChatMessages((prev) => [...prev, {username, message}]);
     };
     socket.on("chatMessage", handleMessage);
     return () => {
@@ -100,7 +100,6 @@ const Canvas = ({user}) => {
     e.preventDefault();
     const messageToSend = chatInput.trim()
     if(!messageToSend) return;
-    setChatMessages((prev) => [...prev, messageToSend]);
     socket.emit("chatMessage", {roomId: lobbyId, username:user, message: messageToSend})
     setChatInput('');
   };
@@ -147,7 +146,7 @@ const Canvas = ({user}) => {
         <div id={styles.chat}>
           {chatMessages.map((msg, idx) => (
             <div id={styles.messages} key={idx}>
-              <strong>{msg.username}</strong> {msg.message}
+              <strong>{msg.username}</strong>: {msg.message}
             </div>
           ))}
         </div>
