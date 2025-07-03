@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "../styles/game.module.css"
 import Canvas from "./canvas";
-import socket from "./socket"
 
 const Game = ({token, user})  => {
   const [lobbyInfo, setLobbyInfo] = useState({})
@@ -14,24 +13,6 @@ const Game = ({token, user})  => {
   const inputRef = useRef(null)
   const navigate = useNavigate()
   const { id: lobbyId } = useParams();
-
-  useEffect(() => {
-    if (!lobbyId || !user) return;
-    socket.emit("joinRoom", {roomId: lobbyId, username: user});
-    const handleUserJoined = (username) => {
-      console.log(`${username} joined the room`);
-    };
-    const handleUserLeft = (username) => {
-      console.log(`${username} left the room`)
-    };
-    socket.on("userJoined", handleUserJoined);
-    socket.on("userLeft", handleUserLeft)
-    return () => {
-      socket.emit("leaveRoom", {roomId: lobbyId, username: user});
-      socket.off("userJoined", handleUserJoined);
-      socket.off("userLeft", handleUserLeft);
-    };
-  }, [lobbyId, user]);
 
   useEffect(() => {
     const getLobbyInfo = async() => {

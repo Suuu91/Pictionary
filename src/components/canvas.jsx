@@ -12,17 +12,35 @@ const Canvas = ({user}) => {
   const [strokeSize, setStrokeSize] = useState(3);
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
+  const chatEndRef = useRef(null)
   const { id: lobbyId } = useParams();
 
   useEffect(() => {
+    if (!lobbyId || !user) return;
+    socket.emit("joinRoom", {roomId: lobbyId, username: user});
+    const handleUserJoined = (username) => {
+      setChatMessages((prev) => [...prev, {username:`RoomBot`, message:`${username} joined the room`}])
+    };
+    const handleUserLeft = (username) => {
+      setChatMessages((prev) => [...prev, {username:`RoomBot`, message:`${username} has left the room`}])
+    };
     const handleMessage = ({username, message}) => {
       setChatMessages((prev) => [...prev, {username, message}]);
     };
+    socket.on("userJoined", handleUserJoined);
+    socket.on("userLeft", handleUserLeft) 
     socket.on("chatMessage", handleMessage);
     return () => {
+      socket.emit("leaveRoom", {roomId: lobbyId, username: user});
+      socket.off("userJoined", handleUserJoined);
+      socket.off("userLeft", handleUserLeft);
       socket.off("chatMessage", handleMessage);
     };
-  }, []);
+  }, [lobbyId, user]);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  },[chatMessages])
 
   const canvasSize = {
     height: 650,
@@ -149,6 +167,7 @@ const Canvas = ({user}) => {
               <strong>{msg.username}</strong>: {msg.message}
             </div>
           ))}
+          <div ref={chatEndRef} />
         </div>
 
           <form onSubmit={handleChatSubmit}>
