@@ -38,6 +38,10 @@ const Register = ({setToken, setUserId, setUser}) =>{
       else{alert("Please enter valid information.")}
     };
 
+    const navToLogin = () => {
+      navigate("/login")
+    }
+
   return (
     <>
       <form onSubmit={submitForm} id={styles.register}>
@@ -46,6 +50,11 @@ const Register = ({setToken, setUserId, setUser}) =>{
         <label>Password: </label><input type="password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
         <button>Submit</button>
       </form>
+      <div id={styles.nav}>
+        <form id={styles.navToForm}>
+          <label id={styles.navTo} onClick={navToLogin}>Click Here To Login</label>
+        </form>
+      </div>
     </>
   )
 }
