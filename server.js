@@ -66,16 +66,21 @@ io.on("connection", (socket) => {
 
   socket.on("drawing",({roomId, data}) => {
     if (!roomPaths[roomId]) roomPaths[roomId] = [];
-    roomPaths[roomId].push(data)
-    socket.to(roomId).emit("drawing", data);
+    const userStrokes = {...data, username: socket.username}
+    roomPaths[roomId].push(userStrokes)
+    socket.to(roomId).emit("drawing", userStrokes);
   });
 
-  socket.on("undo", ({roomId}) => {
-    if (roomPaths[roomId]?.length) {
-      roomPaths[roomId].pop()
-      io.to(roomId).emit("updatePaths", roomPaths[roomId])
+socket.on("undo", ({ roomId }) => {
+  if (!roomPaths[roomId]?.length) return;
+  for (let i = roomPaths[roomId].length - 1; i >= 0; i--) {
+    if (roomPaths[roomId][i].username === socket.username) {
+      roomPaths[roomId].splice(i, 1);
+      break;
     }
-  })
+  };
+  io.to(roomId).emit("updatePaths", roomPaths[roomId]);
+});
 
   socket.on("requestClear", ({roomId, username}) => {
     const room = io.sockets.adapter.rooms.get(roomId)
