@@ -10,6 +10,7 @@ const Game = ({token, user})  => {
   const [showTopicInput, setShowTopicInput] = useState(false)
   const [topicToAdd, setTopicToAdd] = useState("")
   const [drawingTopic, setDrawingTopic] = useState("")
+  const [paths, setPaths] = useState([]);
   const inputRef = useRef(null)
   const navigate = useNavigate()
   const { id: lobbyId } = useParams();
@@ -112,9 +113,20 @@ const Game = ({token, user})  => {
          <>
           <h1>{lobbyInfo.name}</h1>
           <form id={styles.topicForm}>
-            <label id={styles.topic} onClick={()=>setShowTopicInput(true)}>{drawingTopic}</label>
+            <label 
+              id={styles.topic} 
+              onClick={() => {
+                if (paths.length === 0) setShowTopicInput(true)
+              }}
+              style={{
+                opacity: paths.length>0 ? 0.5 : 1,
+                pointerEvents: paths.length > 0 ? 'none' : 'auto'
+              }}
+            >
+              {drawingTopic}
+            </label>
           </form>
-          <Canvas user={user}/>
+          <Canvas user={user} paths={paths} setPaths={setPaths}/>
          </>
       )}
 

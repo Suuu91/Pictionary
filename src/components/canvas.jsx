@@ -3,10 +3,9 @@ import { useEffect, useRef, useState } from 'react';
 import { useParams } from "react-router-dom";
 import socket from "./socket"
 
-const Canvas = ({user}) => {
+const Canvas = ({user, setPaths}) => {
   const canvasRef = useRef(null);
   const isDrawing = useRef(false);
-  const [paths, setPaths] = useState([]);
   const [currentPath, setCurrentPath] = useState([]);
   const [color, setColor] = useState('#000000');
   const [strokeSize, setStrokeSize] = useState(3);
