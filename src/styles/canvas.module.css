@@ -64,3 +64,33 @@
   width: 200px;
   margin-Left: 25px
 }
+
+#clearReqPop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(22, 90, 185, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#clearReqBar {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  font-size: 25px;
+  padding: 2rem;
+  background-color: rgb(234, 213, 235);
+  border: 5px dashed #da34ce;
+  border-radius: 50px;
+  width: 600px;
+}
+
+#clearReqBar button {
+  width: 150px;
+  height: 50px;
+  padding: 0px;
+}

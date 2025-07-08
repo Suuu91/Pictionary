@@ -99,7 +99,7 @@ io.on("connection", (socket) => {
     const request = pendingClear[roomId];
     if (!request) return;
     if (!accepted) {
-      io.to(roomId).emit("clear-declined", { by: socket.username });
+      socket.to(roomId).emit("clear-declined", { by: socket.username });
       delete pendingClear[roomId];
       return;
     }
