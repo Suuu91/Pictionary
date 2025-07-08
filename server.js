@@ -48,6 +48,9 @@ const io = new Server(server, {
   }
 });
 
+const roomPaths = {}
+const pendingClear = {}
+
 io.on("connection", (socket) => {
   console.log("a user connected", socket.id)
   
@@ -55,12 +58,57 @@ io.on("connection", (socket) => {
     socket.join(roomId);
     socket.username = username
     socket.roomId = roomId
+    if (!roomPaths[roomId]) roomPaths[roomId] = []
+    socket.emit("init-paths", roomPaths[roomId]);
     console.log (`user ${username} has joined the room ${roomId}`);
     socket.to(roomId).emit("userJoined", username);
   });
 
   socket.on("drawing",({roomId, data}) => {
+    if (!roomPaths[roomId]) roomPaths[roomId] = [];
+    roomPaths[roomId].push(data)
     socket.to(roomId).emit("drawing", data);
+  });
+
+  socket.on("undo", ({roomId}) => {
+    if (roomPaths[roomId]?.length) {
+      roomPaths[roomId].pop()
+      io.to(roomId).emit("updatePaths", roomPaths[roomId])
+    }
+  })
+
+  socket.on("requestClear", ({roomId, username}) => {
+    const room = io.sockets.adapter.rooms.get(roomId)
+    if (!room) return;
+    const userNumber = room.size-1
+    if (userNumber <= 0) {
+      roomPaths[roomId] = [];
+      io.to(roomId).emit("clear");
+      return;
+    };
+    pendingClear[roomId] = {
+      requester: username,
+      acceptedBy: [],
+      rejected: false,
+      totalExpectedUser: userNumber
+    };
+    socket.to(roomId).emit("confirmClear", {requester:username})
+  });
+
+  socket.on("clearResponse", ({ roomId, accepted }) => {
+    const request = pendingClear[roomId];
+    if (!request) return;
+    if (!accepted) {
+      io.to(roomId).emit("clear-declined", { by: socket.username });
+      delete pendingClear[roomId];
+      return;
+    }
+    request.acceptedBy.push(socket.username);
+    if (request.acceptedBy.length === request.totalExpectedUser) {
+      roomPaths[roomId] = [];
+      io.to(roomId).emit("clear");
+      delete pendingClear[roomId];
+    }
   });
 
   socket.on("chatMessage", ({roomId, username, message}) => {
