@@ -120,6 +120,10 @@ socket.on("undo", ({ roomId }) => {
     io.to(roomId).emit("chatMessage", {username, message})
   });
 
+  socket.on("changeTopic", ({roomId, username, newTopic}) => {
+    socket.to(roomId).emit("topicChanged", {username, newTopic})
+  })
+
   socket.on("leaveRoom", ({roomId, username}) => {
     socket.leave(roomId);
     console.log(`User ${username} has left room ${roomId}`);
