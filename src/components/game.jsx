@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "../styles/game.module.css"
 import Canvas from "./canvas";
+import socket from "./socket"
 
 const Game = ({token, user})  => {
   const [lobbyInfo, setLobbyInfo] = useState({})
@@ -35,6 +36,16 @@ const Game = ({token, user})  => {
     getLobbyInfo()
   },[lobbyId, token])
 
+  useEffect(() => {
+    socket.on("topicChanged", ({username, newTopic}) => {
+      setDrawingTopic(newTopic)
+      alert(`${username} has changed the topic to ${newTopic}`)
+    });
+    return () => {
+      socket.off("topicChanged")
+    }
+  })
+
   const handleYes = async() => {
     try {
       await fetch(`https://pictionary-183l.onrender.com/lobby/${lobbyId}/leave`, {
@@ -66,6 +77,7 @@ const Game = ({token, user})  => {
     })
     const lobbyInfo = await res.json()
     setDrawingTopic(lobbyInfo.lobby.title)
+    socket.emit("changeTopic", ({roomId: lobbyId, username: user, newTopic: lobbyInfo.lobby.title}))
     setShowTopicInput(false)
   };
 
@@ -90,6 +102,7 @@ const Game = ({token, user})  => {
         })
       })
       setDrawingTopic(randomTopicInfo.text)
+      socket.emit("changeTopic", ({roomId: lobbyId, username: user, newTopic: randomTopicInfo.text}))
       alert(`Your Topic is ${randomTopicInfo.text}`)
       setShowTopicInput(false)
     } catch (error) {
