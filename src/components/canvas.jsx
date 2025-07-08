@@ -12,6 +12,7 @@ const Canvas = ({user}) => {
   const [strokeSize, setStrokeSize] = useState(3);
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
+  const [clearRequest, setClearRequest] = useState(null)
   const chatEndRef = useRef(null)
   const { id: lobbyId } = useParams();
 
@@ -41,6 +42,44 @@ const Canvas = ({user}) => {
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   },[chatMessages])
+
+  useEffect(() => {
+    if (!lobbyId || !user) return;
+    socket.on("drawing", (data) => {
+      setPaths((prev) => {
+        const updated = [...prev, data]
+        redraw(updated)
+        return updated
+      })
+    });
+    socket.on("init-paths", (initialPaths) => {
+      setPaths(initialPaths);
+      redraw(initialPaths)
+    });
+    socket.on("updatePaths", (newPaths) => {
+      setPaths(newPaths)
+      redraw(newPaths)
+    });
+    socket.on("clear", () => {
+      setPaths([]);
+      const ctx = getContext();
+      ctx.clearRect(0,0, canvasRef.current.width, canvasRef.current.height);
+    });
+    socket.on("clear-declined", ({by}) => {
+      alert(`${by} declined the clear request.`);
+    });
+    socket.on("confirmClear", ({ requester }) => {
+      setClearRequest({requester})
+    });
+    return () => {
+      socket.off("drawing");
+      socket.off("init-paths");
+      socket.off("updatePaths");
+      socket.off("clear");
+      socket.off("clear-declined");
+      socket.off("confirmClear");
+    };
+  }, [lobbyId, user])
 
   const canvasSize = {
     height: 650,
@@ -97,21 +136,21 @@ const Canvas = ({user}) => {
   const handleMouseUp = () => {
     if (!isDrawing.current) return;
     isDrawing.current = false;
-    setPaths((prev) => [...prev, { color, size: strokeSize, points: currentPath }]);
+    const newStroke = { color, size: strokeSize, points: currentPath };
+    setPaths((prev) => [...prev, newStroke]);
     setCurrentPath([]);
+    socket.emit("drawing", {
+      roomId: lobbyId,
+      data: newStroke
+    })
   };
 
   const handleUndo = () => {
-    const updatedPaths = paths.slice(0, -1);
-    setPaths(updatedPaths);
-    redraw(updatedPaths);
+    socket.emit("undo", {roomId: lobbyId})
   };
 
   const handleClear = () => {
-    setPaths([]);
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    socket.emit("requestClear", {roomId: lobbyId, username: user})
   };
 
   const handleChatSubmit = (e) => {
@@ -121,6 +160,16 @@ const Canvas = ({user}) => {
     socket.emit("chatMessage", {roomId: lobbyId, username:user, message: messageToSend})
     setChatInput('');
   };
+
+  const handleClearAccept = () => {
+    socket.emit("clearResponse", { roomId: lobbyId, accepted: true });
+    setClearRequest(null);
+  }
+
+  const handleClearReject = () => {
+    socket.emit("clearResponse", { roomId: lobbyId, accepted: false });
+    setClearRequest(null);
+  }
 
   return (
     <div id={styles.canvas}>
@@ -183,6 +232,18 @@ const Canvas = ({user}) => {
             </button>
           </form>
       </div>
+
+      {clearRequest && (
+        <div id={styles.clearReqPop}>
+          <div id={styles.clearReqBar}>
+            <div>
+              <p>{clearRequest.requester} is requesting to clear the canvas.</p>
+              <button onClick={handleClearAccept}>Accept</button>
+              <button onClick={handleClearReject}>Decline</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
