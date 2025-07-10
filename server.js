@@ -1,5 +1,5 @@
 require("dotenv").config();
-const prisma = require("../prisma")
+const prisma = require("./prisma")
 
 const cors = require('cors');
 const express = require("express");
