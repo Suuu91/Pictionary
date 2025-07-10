@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useParams } from "react-router-dom";
 import socket from "./socket"
 
-const Canvas = ({user, setPaths}) => {
+const Canvas = ({user, setPaths, userId}) => {
   const canvasRef = useRef(null);
   const isDrawing = useRef(false);
   const [currentPath, setCurrentPath] = useState([]);
@@ -17,7 +17,7 @@ const Canvas = ({user, setPaths}) => {
 
   useEffect(() => {
     if (!lobbyId || !user) return;
-    socket.emit("joinRoom", {roomId: lobbyId, username: user});
+    socket.emit("joinRoom", {roomId: lobbyId, username: user, userId: userId});
     const handleUserJoined = (username) => {
       setChatMessages((prev) => [...prev, {username:`RoomBot`, message:`${username} joined the room`}])
     };
