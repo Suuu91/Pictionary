@@ -56,18 +56,17 @@ const userCleanUp = async(socket) => {
   if (!socket.roomId || !socket.userId || !socket.username) return;
   try {
     await prisma.user.update({
-      where: {id: socket.userId},
+      where: {id: Number(socket.userId)},
       data: {lobbyId: null}
     });
-    const lobby = await prisma.lobby.findUnique({
-      where: {id: Number(socket.roomId)},
-      include: {players: true}
+    const players = await prisma.user.findMany({
+      where: { lobbyId: Number(socket.roomId) },
     });
-    if (lobby && lobby.players.length === 0) {
+    if (players.length === 0) {
       await prisma.lobby.delete({
-        where: {id: Number(socket.roomId)}
-      })
-      console.log(`Lobby ${socket.roomId} deleted due to being empty`)
+        where: { id: Number(socket.roomId) },
+      });
+      console.log(`Lobby ${socket.roomId} deleted due to being empty`);
       delete roomPaths[socket.roomId];
       delete pendingClear[socket.roomId];
     }
