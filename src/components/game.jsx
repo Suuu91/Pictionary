@@ -4,7 +4,7 @@ import styles from "../styles/game.module.css"
 import Canvas from "./canvas";
 import socket from "./socket"
 
-const Game = ({token, user})  => {
+const Game = ({token, user, userId})  => {
   const [lobbyInfo, setLobbyInfo] = useState({})
   const [permission, SetPermission] = useState(true)
   const [showPopup, setShowPopup] = useState(false)
@@ -139,7 +139,7 @@ const Game = ({token, user})  => {
               {drawingTopic}
             </label>
           </form>
-          <Canvas user={user} paths={paths} setPaths={setPaths}/>
+          <Canvas userId={userId} user={user} paths={paths} setPaths={setPaths}/>
          </>
       )}
 

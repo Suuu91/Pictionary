@@ -51,13 +51,38 @@ const io = new Server(server, {
 const roomPaths = {}
 const pendingClear = {}
 
+const userCleanUp = async(socket) => {
+  if (!socket.roomId || !socket.userId || !socket.username) return;
+  try {
+    await prisma.user.update({
+      where: {id: socket.userId},
+      data: {lobbyId: null}
+    });
+    const lobby = await prisma.lobby.findUnique({
+      where: {id: Number(socket.roomId)},
+      include: {players: true}
+    });
+    if (lobby && lobby.players.length === 0) {
+      await prisma.lobby.delete({
+        where: {id: Number(socket.roomId)}
+      })
+      console.log(`Lobby ${socket.roomId} deleted due to being empty`)
+      delete roomPaths[socket.roomId];
+      delete pendingClear[socket.roomId];
+    }
+  } catch (error) {
+    console.error("error cleaning up empty lobby:", error)
+  }
+}
+
 io.on("connection", (socket) => {
   console.log("a user connected", socket.id)
   
-  socket.on("joinRoom", ({roomId, username}) => {
+  socket.on("joinRoom", ({roomId, username, userId}) => {
     socket.join(roomId);
     socket.username = username
     socket.roomId = roomId
+    socket.userId = userId
     if (!roomPaths[roomId]) roomPaths[roomId] = []
     socket.emit("init-paths", roomPaths[roomId]);
     console.log (`user ${username} has joined the room ${roomId}`);
@@ -124,17 +149,19 @@ socket.on("undo", ({ roomId }) => {
     socket.to(roomId).emit("topicChanged", {username, newTopic})
   })
 
-  socket.on("leaveRoom", ({roomId, username}) => {
+  socket.on("leaveRoom", async({roomId, username}) => {
     socket.leave(roomId);
     console.log(`User ${username} has left room ${roomId}`);
     socket.to(roomId).emit("userLeft", username)
+    await userCleanUp(socket);
   });
 
-  socket.on("disconnect", () => {
+  socket.on("disconnect", async() => {
     console.log("User disconnected:", socket.id);
-    if (socket.roomId && socket.username) {
+    if (socket.roomId && socket.username && socket.userId) {
       socket.to(socket.roomId).emit("userLeft", socket.username)
       console.log(`User ${socket.username} left room ${socket.roomId}`)
+      await userCleanUp(socket);
     }
   });
 });
