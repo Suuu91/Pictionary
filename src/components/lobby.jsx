@@ -10,12 +10,13 @@ const Lobby = ({token}) => {
   const [partyName, setPartyName] = useState("");
   const navigate = useNavigate();
 
+  const getAllRoom = async() => {
+    const res = await fetch('https://pictionary-183l.onrender.com/lobby')
+    const allLobbyInfo = await res.json()
+    setAllLobby(allLobbyInfo)
+  };
+  
   useEffect(() => {
-    const getAllRoom = async() => {
-      const res = await fetch('https://pictionary-183l.onrender.com/lobby')
-      const allLobbyInfo = await res.json()
-      setAllLobby(allLobbyInfo)
-    };
     getAllRoom()
   },[])
 
@@ -81,6 +82,7 @@ const joinLobby = async (lobby) => {
         <h3>OR</h3>
         <section id={styles.lobbylist}>
             <h3>Join a Lobby</h3>
+            <span id={styles.refresh} onClick={()=>getAllRoom()} role="button">↻ Refresh</span>
           {
             allLobby.map((singleLobby) => {
               const goSingleLobby = () => {
