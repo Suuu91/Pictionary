@@ -4,6 +4,8 @@ const roomPaths = {}
 const pendingClear = {}
 
 const userCleanUp = async(socket) => {
+  if (socket.hasCleaned) return;
+  socket.hasCleaned = true;
   if (!socket.roomId || !socket.userId || !socket.username) return;
   try {
     await prisma.user.update({
@@ -32,6 +34,10 @@ const setupSocket = (io) => {
     console.log("a user connected", socket.id)
     
     socket.on("joinRoom", ({roomId, username, userId}) => {
+      if (!roomId || !username || !userId) {
+        console.warn('Invalid joinRoom:', { roomId, username, userId });
+        return;
+      }
       socket.join(roomId);
       socket.username = username
       socket.roomId = roomId
@@ -103,6 +109,10 @@ const setupSocket = (io) => {
     })
     
     socket.on("leaveRoom", async({roomId, username}) => {
+      if (!roomId || !username) {
+        console.warn('Invalid LeaveRoom:', { roomId, username });
+        return;
+      }
       socket.leave(roomId);
       console.log(`User ${username} has left room ${roomId}`);
       socket.to(roomId).emit("userLeft", username)
