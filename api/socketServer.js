@@ -59,10 +59,6 @@ const setupSocket = (io) => {
         delete pendingRoomDelete[roomId]
         console.log(`Deletion cancelled: User ${username} joined room ${roomId}`)
       };
-      await prisma.user.update({
-        where:{id:Number(userId)},
-        data:{lobbyId: Number(roomId)}
-      });
       if (!roomPaths[roomId]) roomPaths[roomId] = []
       socket.emit("init-paths", roomPaths[roomId]);
       console.log (`user ${username} has joined the room ${roomId}`);
