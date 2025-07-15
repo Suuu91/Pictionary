@@ -2,11 +2,8 @@ const prisma = require("../prisma")
 
 const roomPaths = {}
 const pendingClear = {}
-const pendingRoomDelete = {}
 
 const userCleanUp = async(socket) => {
-  if (socket.hasCleaned) return;
-  socket.hasCleaned = true;
   if (!socket.roomId || !socket.userId || !socket.username) return;
   try {
     await prisma.user.update({
@@ -17,22 +14,12 @@ const userCleanUp = async(socket) => {
       where: { lobbyId: Number(socket.roomId) },
     });
     if (players.length === 0) {
-      if (pendingRoomDelete[socket.roomId]) return;
-      console.log(`Lobby ${socket.roomId} is empty. Starting deletion`)
-      const timeoutId = setTimeout(async() =>{
-        try {
-          await prisma.lobby.delete({
-            where: { id: Number(socket.roomId) },
-          });
-          console.log(`Lobby ${socket.roomId} deleted due to being empty`);
-          delete roomPaths[socket.roomId];
-          delete pendingClear[socket.roomId];
-        } catch (error) {
-          console.error("Error deleting empty room:", error)          
-        }
-        delete pendingRoomDelete[socket.roomId];
-      }, 10000);
-      pendingRoomDelete[socket.roomId] = timeoutId
+      await prisma.lobby.delete({
+        where: { id: Number(socket.roomId) },
+      });
+      console.log(`Lobby ${socket.roomId} deleted due to being empty`);
+      delete roomPaths[socket.roomId];
+      delete pendingClear[socket.roomId];
     }
   } catch (error) {
     console.error("error cleaning up empty lobby:", error)
@@ -44,7 +31,7 @@ const setupSocket = (io) => {
   io.on("connection", (socket) => {
     console.log("a user connected", socket.id)
     
-    socket.on("joinRoom", async({roomId, username, userId}) => {
+    socket.on("joinRoom", ({roomId, username, userId}) => {
       if (!roomId || !username || !userId) {
         console.warn('Invalid joinRoom:', { roomId, username, userId });
         return;
@@ -53,12 +40,6 @@ const setupSocket = (io) => {
       socket.username = username
       socket.roomId = roomId
       socket.userId = userId
-      socket.hasCleaned = false
-      if (pendingRoomDelete[roomId]) {
-        clearTimeout(pendingRoomDelete[roomId])
-        delete pendingRoomDelete[roomId]
-        console.log(`Deletion cancelled: User ${username} joined room ${roomId}`)
-      };
       if (!roomPaths[roomId]) roomPaths[roomId] = []
       socket.emit("init-paths", roomPaths[roomId]);
       console.log (`user ${username} has joined the room ${roomId}`);
