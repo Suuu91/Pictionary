@@ -59,7 +59,7 @@ const joinLobby = async (lobby) => {
     });
     if (!res.ok) {
       const err = await res.json();
-      alert(err.error || "Failed to join, please make sure you are logged in.");
+      alert(err.error || "Failed to join, please make sure you are logged in and the lobby still exits.");
       return;
     } else  navigate(`/lobby/${lobby}`)
   } catch (err) {
