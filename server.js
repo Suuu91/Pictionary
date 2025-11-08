@@ -1,3 +1,4 @@
+if (typeof global.SlowBuffer === "undefined") global.SlowBuffer = Buffer;
 require("dotenv").config();
 const setupSocket = require("./api/socketServer")
 
